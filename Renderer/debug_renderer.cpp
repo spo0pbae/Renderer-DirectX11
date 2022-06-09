@@ -72,5 +72,37 @@ namespace end
 				add_line(start, end, color, color);
 			}
 		}
+
+		void create_grid(float _size, float4 _color)
+		{
+			float spacing	= 0.5f;
+			int lineCount	= (int)(_size / spacing);
+
+			float x = -_size / 2.0f;
+			float y = -_size / 2.0f;
+			float xS = spacing, yS = spacing;
+
+			y = -_size / 2.0f;
+			for (int i = 0; i <= lineCount; i++)
+			{
+				if (i != lineCount / 2)
+					add_line({ x, 0.0f, y }, { x + _size, 0.0f, y }, _color);
+				else
+					add_line({ x, 0.0f, y }, { x + _size, 0.0f, y }, { 1.0f, 1.0f, 1.0f, 1.0f });
+				y += yS;
+			}
+
+			y = -_size / 2.0f;
+			x = -_size / 2.0f;
+
+			for (int i = 0; i <= lineCount; i++)
+			{
+				if (i != lineCount / 2)
+					add_line({ x, 0.0f, y }, { x , 0.0f, y + _size }, _color);
+				else
+					add_line({ x, 0.0f, y }, { x , 0.0f, y + _size }, { 1.0f , 1.0f, 1.0f, 1.0f });
+				x += xS;
+			}
+		}
 	}
 }

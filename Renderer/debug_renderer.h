@@ -13,5 +13,6 @@ namespace end
 		size_t get_line_vert_count();
 		size_t get_line_vert_capacity();
 		void add_matrix_transform(const float4x4&);
+		void create_grid(float _size, float4 _color);
 	}
 }

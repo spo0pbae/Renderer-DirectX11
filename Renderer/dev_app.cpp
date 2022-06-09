@@ -35,43 +35,11 @@ namespace end
 
 	void dev_app_t::update()
 	{
-		// stuff update can be used for
-		// Update velocity of particles
-		// pos += vel * deltaTime
-		// Move camera
-		// collect input
-		// Do not use draw_view, only for rendering
-
 		delta_time = calc_delta_time();
 		float colorTime = delta_time;
 
-#pragma region grid
-		//X
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, -5.0f), float3(5.0f, 0.0f, -5.0f), gridCol);	// edge
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, -4.0f), float3(5.0f, 0.0f, -4.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, -3.0f), float3(5.0f, 0.0f, -3.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, -2.0f), float3(5.0f, 0.0f, -2.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, -1.0f), float3(5.0f, 0.0f, -1.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, 0.0f), float3(5.0f, 0.0f, 0.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, 1.0f), float3(5.0f, 0.0f, 1.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, 2.0f), float3(5.0f, 0.0f, 2.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, 3.0f), float3(5.0f, 0.0f, 3.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, 4.0f), float3(5.0f, 0.0f, 4.0f), gridCol);
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, 5.0f), float3(5.0f, 0.0f, 5.0f), gridCol);	// edge
-
-		//Z
-		end::debug_renderer::add_line(float3(-5.0f, 0.0f, 5.0f), float3(-5.0f, 0.0f, -5.0f), gridCol);	// edge
-		end::debug_renderer::add_line(float3(-4.0f, 0.0f, 5.0f), float3(-4.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(-3.0f, 0.0f, 5.0f), float3(-3.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(-2.0f, 0.0f, 5.0f), float3(-2.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(-1.0f, 0.0f, 5.0f), float3(-1.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(0.0f, 0.0f, 5.0f), float3(0.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(1.0f, 0.0f, 5.0f), float3(1.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(2.0f, 0.0f, 5.0f), float3(2.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(3.0f, 0.0f, 5.0f), float3(3.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(4.0f, 0.0f, 5.0f), float3(4.0f, 0.0f, -5.0f), gridCol);
-		end::debug_renderer::add_line(float3(5.0f, 0.0f, 5.0f), float3(5.0f, 0.0f, -5.0f), gridCol);	// edge
-#pragma endregion
+		// Draw grid
+		end:debug_renderer::create_grid(10, gridCol);
 
 		// TODO: do your updates here
 		// color updates
@@ -89,9 +57,8 @@ namespace end
 			colorFlag = false;
 
 		int spawnCount = 3;
+
 		// LAB 1 PARTICLES
-#pragma region SORTED POOL
-#if 1
 		center.spawnCol = { 1.0f, 1.0f, 1.0f, 1.0f };
 		center.spawnPos = { 0.0f, 0.0f, 0.0f };			// The location the particles originate?
 
@@ -103,14 +70,18 @@ namespace end
 			// safety check index
 			if (ndx != -1)
 			{
-				particle& p = center.sortedPool[ndx];
-				p.color = center.spawnCol;
-				p.pos = center.spawnPos;
+				float randR = RandNumToNum(0.0f, 1.0f);
+				float randG = RandNumToNum(0.0f, 1.0f);
+				float randB = RandNumToNum(0.0f, 1.0f);
 
-				float randX = RandNumToNum(-1.0, 1.0);
-				float randY = RandNumToNum(3.0, 9.0);
-				float randZ = RandNumToNum(-1.0, 1.0);
-				p.vel = { randX, randY, randZ };
+				float randX = RandNumToNum(-0.75, 0.75);
+				float randY = RandNumToNum(5.0, 10.0);
+				float randZ = RandNumToNum(-0.75, 0.75);
+
+				particle& p = center.sortedPool[ndx];
+				p.pos		= center.spawnPos;
+				p.color		= { randR, randG, randB, 1.0f };
+				p.vel		= { randX, randY, randZ };
 			}
 		}
 
@@ -134,11 +105,7 @@ namespace end
 				end::debug_renderer::add_line(p.pos, p.prevPos, p.color);
 			}
 		}
-#endif
-#pragma endregion
 
-#pragma region FREE POOL
-#if 1
 		// Free pool
 		corners[0].spawnPos = { -5.0f, 0.0f,-5.0f };
 		corners[0].spawnCol = { 1.0f, 0.0f, 0.0f, 1.0f };	// red
@@ -166,13 +133,13 @@ namespace end
 						// fill the index with the index from sharedpool?
 						corners[j].indices[emitterNdx] = particleNdx;
 
-						particle& p = sharedPool[corners[j].indices[emitterNdx]];
+						particle& p = sharedPool[particleNdx];
 						p.color		= corners[j].spawnCol;
 						p.pos		= corners[j].spawnPos;
 
-						float randX = RandNumToNum(-1.0, 1.0);
-						float randY = RandNumToNum( 3.0, 9.0);
-						float randZ = RandNumToNum(-1.0, 1.0);
+						float randX = RandNumToNum(-0.75, 0.75 );
+						float randY = RandNumToNum( 5.0, 10.0);
+						float randZ = RandNumToNum(-0.75, 0.75 );
 						p.vel		= { randX, randY, randZ };
 					}
 					else
@@ -184,8 +151,6 @@ namespace end
 			}
 		}
 
-		// temporarily turning off update
-#if 1
 		// UPDATE
 		for (int i = 0; i < 4; i++)// for each emitter
 		{
@@ -211,21 +176,6 @@ namespace end
 				}
 			}
 		}
-#endif
-
-#endif
-#pragma endregion
-
-			//// LAB 2 TRANSFORMS
-			//end::float4x4 mx1;
-			//end::float4x4 mx2;
-			//end::float4x4 mx3;
-
-			//mx1[3] = { 0.0f, 1.0f, 0.0f, 1.0f };
-			//end::debug_renderer::add_matrix_transform((end::float4x4&)mx1);
-			////end::debug_renderer::add_matrix_transform((end::float4x4&)mx2);
-			////end::debug_renderer::add_matrix_transform((end::float4x4&)mx3);
-		
 	}
 	void dev_app_t::update_camera()
 	{
