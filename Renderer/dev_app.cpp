@@ -59,6 +59,7 @@ namespace end
 		int spawnCount = 3;
 
 		// LAB 1 PARTICLES
+#if 0
 		center.spawnCol = { 1.0f, 1.0f, 1.0f, 1.0f };
 		center.spawnPos = { 0.0f, 0.0f, 0.0f };			// The location the particles originate?
 
@@ -159,8 +160,8 @@ namespace end
 				// find corresponding particle and update
 				particle& p = sharedPool[corners[i].indices[j]];
 				p.prevPos	= p.pos;
-				p.pos		+= p.vel * delta_time;
-				p.vel		+= gravity * delta_time;
+				p.pos		+= p.vel   * (float)delta_time;
+				p.vel		+= gravity * (float)delta_time;
 
 				// Free index if it falls below grid
 				if (p.pos[1] <= 0.0f)
@@ -176,7 +177,26 @@ namespace end
 				}
 			}
 		}
+#endif
+
+		if (keystate[inputMap['w']] == true)
+		{
+			std::cout << "Holy hecc, it works!!!!!!\n";
+		}
+		if (keystate[inputMap['s']] == true)
+		{
+			std::cout << "Holy hecc, it works!!!!!!\n";
+		}
+		if (keystate[inputMap['d']] == true)
+		{
+			std::cout << "Holy hecc, it works!!!!!!\n";
+		}
+		if (keystate[inputMap['a']] == true)
+		{
+			std::cout << "Holy hecc, it works!!!!!!\n";
+		}
 	}
+
 	void dev_app_t::update_camera()
 	{
 		// do some camera stuff

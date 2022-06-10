@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint>
 #include <chrono>
+
+#include "InputMap.h"
 #include "Emitters.h"
 
 namespace end

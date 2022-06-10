@@ -151,37 +151,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_KEYDOWN:
 		{
-			std::cout << "A key is down" << std::endl;
+			end::keystate[end::inputMap[(int)wParam]] = true;
 			break;
 		}
 		case WM_KEYUP:
 		{
-			std::cout << "A key has been released" << std::endl;
+			end::keystate[end::inputMap[(int)wParam]] = false;
 			break;
 		}
 		case WM_LBUTTONDOWN:
 		{
-			std::cout << "mouse left button pressed" << std::endl;
+			end::keystate[end::inputMap[(int)wParam]] = true;
 			break;
 		}
 		case WM_LBUTTONUP:
 		{
-			std::cout << "mouse left button released" << std::endl;
+			end::keystate[end::inputMap[(int)wParam]] = false;
 			break;
 		}
 		case WM_RBUTTONDOWN:
 		{
-			std::cout << "mouse right button pressed" << std::endl;
+			end::keystate[end::inputMap[(int)wParam]] = true;
 			break;
 		}
 		case WM_RBUTTONUP:
 		{
-			std::cout << "mouse right button released" << std::endl;
+			end::keystate[end::inputMap[(int)wParam]] = false;
 			break;
 		}
 		case WM_MOUSEMOVE:
 		{
-			std::cout << "mouse moved" << std::endl;
+			//std::cout << "mouse moved" << std::endl;
+			//end::keystate[(int)wParam] = true;
 			break;
 		}
 		default:
@@ -245,12 +246,6 @@ MSG begin_main_loop()
 {
 	MSG msg;
 	end::renderer_t renderer(main_hwnd);
-
-	// LAB2: 3 transforms
-	
-	end::float4x4 mx1;
-	end::float4x4 mx2;
-	end::float4x4 mx3;
 
 	// Main application loop:
 	while (true)

@@ -7,7 +7,6 @@ namespace end
 	class view_t
 	{
 	public:
-
 		float4x4_a view_mat;
 		float4x4_a proj_mat;
 
@@ -22,11 +21,7 @@ namespace end
 		//			It will be much easier on you, me, and the CPU this way.
 		//			When updating your constant buffers, send an inverted copy of the stored view matrix.
 		
-
-
 		// maintains a visible-set of renderable objects in view (implemented in a future assignment)
-
-
 		view_t() {}
 	};
 }
