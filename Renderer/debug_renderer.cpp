@@ -83,7 +83,7 @@ namespace end
 			float xS = spacing, yS = spacing;
 
 			y = -_size / 2.0f;
-			for (int i = 0; i <= lineCount; i++)
+			for (int i = 0; i <= lineCount; ++i)
 			{
 				if (i != lineCount / 2)
 					add_line({ x, 0.0f, y }, { x + _size, 0.0f, y }, _color);
@@ -95,7 +95,7 @@ namespace end
 			y = -_size / 2.0f;
 			x = -_size / 2.0f;
 
-			for (int i = 0; i <= lineCount; i++)
+			for (int i = 0; i <= lineCount; ++i)
 			{
 				if (i != lineCount / 2)
 					add_line({ x, 0.0f, y }, { x , 0.0f, y + _size }, _color);

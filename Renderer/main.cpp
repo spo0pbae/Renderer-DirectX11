@@ -144,43 +144,52 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-
-	case WM_KEYDOWN:
-		std::cout << "A key is down" << std::endl;
-		break;
-
-	case WM_KEYUP:
-		std::cout << "A key has been released" << std::endl;
-		break;
-
-	case WM_LBUTTONDOWN:
-		std::cout << "mouse left button pressed" << std::endl;
-		break;
-
-	case WM_LBUTTONUP:
-		std::cout << "mouse left button released" << std::endl;
-		break;
-
-	case WM_RBUTTONDOWN:
-		std::cout << "mouse right button pressed" << std::endl;
-		break;
-
-	case WM_RBUTTONUP:
-		std::cout << "mouse right button released" << std::endl;
-		break;
-
-	case WM_MOUSEMOVE:
-		std::cout << "mouse moved" << std::endl;
-		break;
-
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
-		break;
+		case WM_DESTROY:
+		{
+			PostQuitMessage(0);
+			break;
+		}
+		case WM_KEYDOWN:
+		{
+			std::cout << "A key is down" << std::endl;
+			break;
+		}
+		case WM_KEYUP:
+		{
+			std::cout << "A key has been released" << std::endl;
+			break;
+		}
+		case WM_LBUTTONDOWN:
+		{
+			std::cout << "mouse left button pressed" << std::endl;
+			break;
+		}
+		case WM_LBUTTONUP:
+		{
+			std::cout << "mouse left button released" << std::endl;
+			break;
+		}
+		case WM_RBUTTONDOWN:
+		{
+			std::cout << "mouse right button pressed" << std::endl;
+			break;
+		}
+		case WM_RBUTTONUP:
+		{
+			std::cout << "mouse right button released" << std::endl;
+			break;
+		}
+		case WM_MOUSEMOVE:
+		{
+			std::cout << "mouse moved" << std::endl;
+			break;
+		}
+		default:
+		{
+			return DefWindowProc(hWnd, message, wParam, lParam);
+			break;
+		}
 	}
-
 	return 0;
 }
 

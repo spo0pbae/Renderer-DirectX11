@@ -63,7 +63,7 @@ namespace end
 		center.spawnPos = { 0.0f, 0.0f, 0.0f };			// The location the particles originate?
 
 		// Spawn particles from sorted pool
-		for (int i = 0; i < spawnCount; i++)
+		for (int i = 0; i < spawnCount; ++i)
 		{
 			int16_t ndx = center.sortedPool.alloc();
 
@@ -86,7 +86,7 @@ namespace end
 		}
 
 		// update sorted pool particles
-		for (int i = 0; i < center.sortedPool.size(); i++) // size returns active count
+		for (int i = 0; i < center.sortedPool.size(); ++i) // size returns active count
 		{
 			particle& p = center.sortedPool[i];
 			p.prevPos = p.pos;
@@ -117,10 +117,10 @@ namespace end
 		corners[3].spawnCol = { 1.0f, 1.0f, 0.0f, 1.0f };	// yellow
 
 		// For each emitter
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < 4; ++j)
 		{
 			// Spawn particles from free pool
-			for (int i = 0; i < spawnCount; i++)
+			for (int i = 0; i < spawnCount; ++i)
 			{
 				// call alloc on free pool to give you index of particle activated in the free pool
 				int16_t particleNdx = sharedPool.alloc();
@@ -152,9 +152,9 @@ namespace end
 		}
 
 		// UPDATE
-		for (int i = 0; i < 4; i++)// for each emitter
+		for (int i = 0; i < 4; ++i)// for each emitter
 		{
-			for (int j = 0; j < corners[i].indices.size(); j++) // for each index
+			for (int j = 0; j < corners[i].indices.size(); ++j) // for each index
 			{
 				// find corresponding particle and update
 				particle& p = sharedPool[corners[i].indices[j]];

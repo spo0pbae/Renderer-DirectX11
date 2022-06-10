@@ -99,7 +99,7 @@ namespace end
 		// store the free lists' 'next' pointers within the free block itself
 		pool_t()
 		{
-			for (int i = 0; i < N; i++)
+			for (int i = 0; i < N; ++i)
 			{
 				pool[i].next = i + 1;
 			}

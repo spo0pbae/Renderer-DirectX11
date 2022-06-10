@@ -17,7 +17,6 @@
 #include "../Renderer/debug_renderer.h"
 
 // NOTE: This header file must *ONLY* be included by renderer.cpp
-
 namespace
 {
 	template<typename T>
@@ -27,7 +26,6 @@ namespace
 			t->Release();
 	}
 }
-
 
 namespace end
 {
@@ -113,7 +111,6 @@ namespace end
 			context->VSSetConstantBuffers(0, 1, &constant_buffer[CONSTANT_BUFFER::MVP]);
 
 			MVP_t mvp;
-
 			mvp.modeling	= XMMatrixTranspose(XMMatrixIdentity());
 			mvp.projection	= XMMatrixTranspose((XMMATRIX&)view.proj_mat);
 			mvp.view		= XMMatrixTranspose(XMMatrixInverse(nullptr, (XMMATRIX&)view.view_mat));
@@ -217,7 +214,7 @@ namespace end
 			{
 				D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0,
 				D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_10_0,
-				D3D_FEATURE_LEVEL_9_3, D3D_FEATURE_LEVEL_9_2, D3D_FEATURE_LEVEL_9_1
+				D3D_FEATURE_LEVEL_9_3,  D3D_FEATURE_LEVEL_9_2,  D3D_FEATURE_LEVEL_9_1
 			};
 
 			UINT createDeviceFlags = 0;
@@ -279,7 +276,6 @@ namespace end
 			/* DEPTH_BUFFER */
 			D3D11_TEXTURE2D_DESC depthBufferDesc;
 			ID3D11Texture2D *depthStencilBuffer;
-
 			ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
 			depthBufferDesc.Width				= (UINT)view_port[VIEWPORT::DEFAULT].Width;
@@ -295,12 +291,10 @@ namespace end
 			depthBufferDesc.MiscFlags			= 0;
 
 			HRESULT hr = device->CreateTexture2D(&depthBufferDesc, NULL, &depthStencilBuffer);
-
 			assert(!FAILED(hr));
 
 			/* DEPTH_STENCIL */
 			D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-
 			ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
 			depthStencilViewDesc.Format				= DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -308,14 +302,12 @@ namespace end
 			depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 			hr = device->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDesc, &depthStencilView[VIEW_DEPTH_STENCIL::DEFAULT]);
-
 			assert(!FAILED(hr));
 
 			depthStencilBuffer->Release();
 
 			/* DEPTH_STENCIL_DESC */
 			D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-
 			ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
 			depthStencilDesc.DepthEnable	= true;
