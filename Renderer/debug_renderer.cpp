@@ -67,7 +67,7 @@ namespace end
 				float4 color{ 0.0f, 0.0f, 0.0f, 1.0f };
 				color[i] = 1.0f;
 
-				//end = matrix.pos + matrix
+				//end point == matrix.pos + matrix
 				float3 end = start + _mx[i].xyz;
 				add_line(start, end, color, color);
 			}

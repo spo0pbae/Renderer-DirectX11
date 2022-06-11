@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "dev_app.h"
 #include "math_types.h"
 #include "debug_renderer.h"
@@ -178,6 +179,15 @@ namespace end
 			}
 		}
 #endif
+
+		float4x4 mat1;
+		mat1[0].x = 1.0f;
+		mat1[1].y = 1.0f;
+		mat1[2].z = 1.0f;
+		mat1[3].w = 1.0f;
+
+		mat1[3].xyz = { 0.0f, 0.5f, 0.0f };
+		end::debug_renderer::add_matrix_transform(mat1);
 
 		if (keystate[inputMap['w']] == true)
 		{
