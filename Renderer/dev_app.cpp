@@ -22,6 +22,24 @@ namespace end
 	{
 		std::cout << "Log whatever you need here.\n"; // Don’t forget to include <iostream>
 		(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixIdentity();
+		mx1[3].xyz = { 0.0f, 0.5f, 0.0f };
+
+		// Set keystates?
+		inputMap['w'] = e_input::FWD;
+		inputMap[87]  = e_input::FWD;
+		//inputMap['w'] = e_input::FWD;
+
+		inputMap['s'] = e_input::BACK;
+		inputMap[83]  = e_input::BACK;
+		//inputMap['s'] = e_input::BACK;
+
+		inputMap['d'] = e_input::RIGHT;
+		inputMap[68]  = e_input::RIGHT;
+		//inputMap['d'] = e_input::RIGHT;
+
+		inputMap['a'] = e_input::LEFT;
+		inputMap[65]  = e_input::LEFT;
+		//inputMap['a'] = e_input::LEFT;
 	}
 	
 	double calc_delta_time()
@@ -61,7 +79,7 @@ namespace end
 		int spawnCount = 3;
 
 		// LAB 1 PARTICLES
-#if 1
+#if 0
 		center.spawnCol = { 1.0f, 1.0f, 1.0f, 1.0f };
 		center.spawnPos = { 0.0f, 0.0f, 0.0f };			// The location the particles originate?
 
@@ -181,32 +199,45 @@ namespace end
 		}
 #endif
 
-
+		// LAB 2 TRANSFORMS
+		//mx1[3].xyz = { 0.0f, 0.5f, 0.0f };
+		end::debug_renderer::add_matrix_transform(mx1);
 		
-		////mx1[3].xyz = { 0.0f, 0.5f, 0.0f };
-		//end::debug_renderer::add_matrix_transform(mx1);
-		//
-		//if (keystate[inputMap['w']] == true)
-		//{
-		//	(DirectX::XMMATRIX&)mx1 += DirectX::XMMatrixTranslation(0.0f, 0.0f, 1.0f) * 2.0f * delta_time;
-		//}
-		//if (keystate[inputMap['s']] == true)
-		//{
-		//	//(DirectX::XMMATRIX&)mx1 += DirectX::XMMatrixTranslation(0.0f, 0.0f, -1.0f) * 2.0f * delta_time;
-		//}
-		//if (keystate[inputMap['d']] == true)
-		//{
-		//	(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixRotationY(DegreesToRadians(60)) * delta_time;;
-		//}
-		//if (keystate[inputMap['a']] == true)
-		//{
-		//	(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixRotationY(DegreesToRadians(60)) * delta_time;;
-		//}
+		float3 translation{0.0f, 0.0f, 1.0f};
+
+		float speed = 2.0f;
+
+		if (keystate[inputMap['w']] == true)
+		{
+			mx1[3].z += 1.0f * speed * (float)delta_time;
+		}
+		else if (keystate[inputMap['s']] == true)
+		{
+			mx1[3].z -= 1.0f * speed * (float)delta_time;
+		}
+		else if (keystate[inputMap['d']] == true)
+		{
+			//(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixRotationY(DegreesToRadians(60)) * delta_time;;
+		}
+		else if (keystate[inputMap['a']] == true)
+		{
+			//(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixRotationY(DegreesToRadians(60)) * delta_time;;
+		}
 	}
 
 	void dev_app_t::update_camera()
 	{
 		// do some camera stuff
+	}
+
+	void dev_app_t::matrix_turn_to()
+	{
+		// need up/down rotation matrix
+		// need left/right rotation matrix
+	}
+	void dev_app_t:: matrix_look_at()
+	{
+
 	}
 
 	float dev_app_t::RandNumToNum(float _a, float _b)

@@ -27,6 +27,12 @@ namespace end
 		void update();
 		void update_camera();
 
+		// turn to modifies existing matrix 
+		void matrix_turn_to();
+
+		// look at
+		void matrix_look_at();
+
 		// math helper functions
 		float RandNumToNum(float _a, float _b);
 		float DegreesToRadians(float _angle);
