@@ -21,6 +21,7 @@ namespace end
 	dev_app_t::dev_app_t()
 	{
 		std::cout << "Log whatever you need here.\n"; // Don’t forget to include <iostream>
+		(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixIdentity();
 	}
 	
 	double calc_delta_time()
@@ -60,7 +61,7 @@ namespace end
 		int spawnCount = 3;
 
 		// LAB 1 PARTICLES
-#if 0
+#if 1
 		center.spawnCol = { 1.0f, 1.0f, 1.0f, 1.0f };
 		center.spawnPos = { 0.0f, 0.0f, 0.0f };			// The location the particles originate?
 
@@ -180,31 +181,27 @@ namespace end
 		}
 #endif
 
-		float4x4 mat1;
-		mat1[0].x = 1.0f;
-		mat1[1].y = 1.0f;
-		mat1[2].z = 1.0f;
-		mat1[3].w = 1.0f;
 
-		mat1[3].xyz = { 0.0f, 0.5f, 0.0f };
-		end::debug_renderer::add_matrix_transform(mat1);
-
-		if (keystate[inputMap['w']] == true)
-		{
-			std::cout << "Holy hecc, it works!!!!!!\n";
-		}
-		if (keystate[inputMap['s']] == true)
-		{
-			std::cout << "Holy hecc, it works!!!!!!\n";
-		}
-		if (keystate[inputMap['d']] == true)
-		{
-			std::cout << "Holy hecc, it works!!!!!!\n";
-		}
-		if (keystate[inputMap['a']] == true)
-		{
-			std::cout << "Holy hecc, it works!!!!!!\n";
-		}
+		
+		////mx1[3].xyz = { 0.0f, 0.5f, 0.0f };
+		//end::debug_renderer::add_matrix_transform(mx1);
+		//
+		//if (keystate[inputMap['w']] == true)
+		//{
+		//	(DirectX::XMMATRIX&)mx1 += DirectX::XMMatrixTranslation(0.0f, 0.0f, 1.0f) * 2.0f * delta_time;
+		//}
+		//if (keystate[inputMap['s']] == true)
+		//{
+		//	//(DirectX::XMMATRIX&)mx1 += DirectX::XMMatrixTranslation(0.0f, 0.0f, -1.0f) * 2.0f * delta_time;
+		//}
+		//if (keystate[inputMap['d']] == true)
+		//{
+		//	(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixRotationY(DegreesToRadians(60)) * delta_time;;
+		//}
+		//if (keystate[inputMap['a']] == true)
+		//{
+		//	(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixRotationY(DegreesToRadians(60)) * delta_time;;
+		//}
 	}
 
 	void dev_app_t::update_camera()
@@ -218,5 +215,10 @@ namespace end
 		float diff  = _b - _a;
 		float r		= rando * diff;
 		return _a + r;
+	}
+
+	float dev_app_t::DegreesToRadians(float _angle)
+	{
+		return _angle * (3.14 / 180);
 	}
 }

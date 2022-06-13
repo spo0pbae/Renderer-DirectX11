@@ -69,6 +69,10 @@ namespace end
 
 				//end point == matrix.pos + matrix
 				float3 end = start + _mx[i].xyz;
+
+				DirectX::XMVector3Normalize((DirectX::XMVECTOR&)start);
+				DirectX::XMVector3Normalize((DirectX::XMVECTOR&)end);
+
 				add_line(start, end, color, color);
 			}
 		}
@@ -77,6 +81,7 @@ namespace end
 		{
 			float spacing	= 0.5f;
 			int lineCount	= (int)(_size / spacing);
+			
 
 			float x = -_size / 2.0f;
 			float y = -_size / 2.0f;
