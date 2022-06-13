@@ -23,6 +23,9 @@ namespace end
 		// constructor
 		dev_app_t();
 
+		void init_content();
+		//void set_rotation(float4x4 _rot, float4x4 _mx);
+
 		double get_delta_time()const;
 		void update();
 		void update_camera();

@@ -21,25 +21,38 @@ namespace end
 	dev_app_t::dev_app_t()
 	{
 		std::cout << "Log whatever you need here.\n"; // Don’t forget to include <iostream>
-		(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixIdentity();
-		mx1[3].xyz = { 0.0f, 0.5f, 0.0f };
+		init_content();
+	}
 
-		// Set keystates?
+	void dev_app_t::init_content()
+	{
+		// Init keystates
 		inputMap['w'] = e_input::FWD;
-		inputMap[87]  = e_input::FWD;
-		//inputMap['w'] = e_input::FWD;
+		inputMap[87] = e_input::FWD;
+		//inputMap[VK_UP] = e_input::FWD;
 
 		inputMap['s'] = e_input::BACK;
-		inputMap[83]  = e_input::BACK;
-		//inputMap['s'] = e_input::BACK;
+		inputMap[83] = e_input::BACK;
+		//inputMap[VK_DOWN] = e_input::BACK;
 
 		inputMap['d'] = e_input::RIGHT;
-		inputMap[68]  = e_input::RIGHT;
-		//inputMap['d'] = e_input::RIGHT;
+		inputMap[68] = e_input::RIGHT;
+		//inputMap[VK_RIGHT] = e_input::RIGHT;
 
 		inputMap['a'] = e_input::LEFT;
-		inputMap[65]  = e_input::LEFT;
-		//inputMap['a'] = e_input::LEFT;
+		inputMap[65] = e_input::LEFT;
+		//inputMap[VK_LEFT] = e_input::LEFT;
+
+		// Initialize matrix positions
+		(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixIdentity();
+		mx1[3].xyz = { 0.0f, 0.1f, 0.0f };
+
+		(DirectX::XMMATRIX&)mx2 = DirectX::XMMatrixIdentity();
+		mx2[3].xyz = { -1.5f, 0.75f, 0.0f };
+
+		(DirectX::XMMATRIX&)mx3 = DirectX::XMMatrixIdentity();
+		mx3[3].xyz = { 0.5f, 0.75f, 1.5f };
+
 	}
 	
 	double calc_delta_time()
@@ -200,28 +213,37 @@ namespace end
 #endif
 
 		// LAB 2 TRANSFORMS
-		//mx1[3].xyz = { 0.0f, 0.5f, 0.0f };
 		end::debug_renderer::add_matrix_transform(mx1);
-		
-		float3 translation{0.0f, 0.0f, 1.0f};
+		end::debug_renderer::add_matrix_transform(mx2);
+		end::debug_renderer::add_matrix_transform(mx3);
 
 		float speed = 2.0f;
+		float3 translation{0.0f, 0.0f, 1.0f * speed * static_cast<float>(delta_time) };
 
 		if (keystate[inputMap['w']] == true)
 		{
-			mx1[3].z += 1.0f * speed * (float)delta_time;
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			mx1[3].z -= 1.0f * speed * static_cast<float>(delta_time);
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 		}
 		else if (keystate[inputMap['s']] == true)
 		{
-			mx1[3].z -= 1.0f * speed * (float)delta_time;
+			// translates along world z...
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			mx1[3].z += 1.0f * speed * static_cast<float>(delta_time);
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 		}
 		else if (keystate[inputMap['d']] == true)
 		{
-			//(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixRotationY(DegreesToRadians(60)) * delta_time;;
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({0}, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 *= DirectX::XMMatrixRotationY(-speed * static_cast<float>(delta_time));
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 		}
 		else if (keystate[inputMap['a']] == true)
 		{
-			//(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixRotationY(DegreesToRadians(60)) * delta_time;;
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 *= DirectX::XMMatrixRotationY(speed * static_cast<float>(delta_time));
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 		}
 	}
 
