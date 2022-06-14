@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <chrono>
+//#include <WinUser.h>
 
 #include "InputMap.h"
 #include "Emitters.h"
@@ -30,11 +31,8 @@ namespace end
 		void update();
 		void update_camera();
 
-		// turn to modifies existing matrix 
-		void matrix_turn_to();
-
-		// look at
-		void matrix_look_at();
+		float4x4 matrix_look_at(float3 _viewerPos, float3 _targetPos, float3 _localUp);
+		float4x4 matrix_turn_to(float4x4 _viewer, float3 _targetPos, float _speed);
 
 		// math helper functions
 		float RandNumToNum(float _a, float _b);

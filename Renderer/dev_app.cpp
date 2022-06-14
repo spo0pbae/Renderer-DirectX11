@@ -28,31 +28,30 @@ namespace end
 	{
 		// Init keystates
 		inputMap['w'] = e_input::FWD;
-		inputMap[87] = e_input::FWD;
-		//inputMap[VK_UP] = e_input::FWD;
+		inputMap[87]  = e_input::FWD;
+		inputMap[38]  = e_input::FWD;	// up arrow
 
 		inputMap['s'] = e_input::BACK;
-		inputMap[83] = e_input::BACK;
-		//inputMap[VK_DOWN] = e_input::BACK;
+		inputMap[83]  = e_input::BACK;
+		inputMap[40]  = e_input::BACK;	// down arrow
 
 		inputMap['d'] = e_input::RIGHT;
-		inputMap[68] = e_input::RIGHT;
-		//inputMap[VK_RIGHT] = e_input::RIGHT;
+		inputMap[68]  = e_input::RIGHT;
+		inputMap[39]  = e_input::RIGHT; // right arrow
 
 		inputMap['a'] = e_input::LEFT;
-		inputMap[65] = e_input::LEFT;
-		//inputMap[VK_LEFT] = e_input::LEFT;
+		inputMap[65]  = e_input::LEFT;
+		inputMap[37]  = e_input::LEFT;	// left arrow
 
 		// Initialize matrix positions
 		(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixIdentity();
 		mx1[3].xyz = { 0.0f, 0.1f, 0.0f };
 
 		(DirectX::XMMATRIX&)mx2 = DirectX::XMMatrixIdentity();
-		mx2[3].xyz = { -1.5f, 0.75f, 0.0f };
+		mx2[3].xyz = { -1.5f, 1.75f, 0.0f };
 
 		(DirectX::XMMATRIX&)mx3 = DirectX::XMMatrixIdentity();
 		mx3[3].xyz = { 0.5f, 0.75f, 1.5f };
-
 	}
 	
 	double calc_delta_time()
@@ -222,29 +221,34 @@ namespace end
 
 		if (keystate[inputMap['w']] == true)
 		{
-			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 			mx1[3].z -= 1.0f * speed * static_cast<float>(delta_time);
-			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 		}
 		else if (keystate[inputMap['s']] == true)
 		{
 			// translates along world z...
-			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 			mx1[3].z += 1.0f * speed * static_cast<float>(delta_time);
-			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 		}
 		else if (keystate[inputMap['d']] == true)
 		{
-			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({0}, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({0}, (DirectX::XMMATRIX&)mx1);
 			(DirectX::XMMATRIX&)mx1 *= DirectX::XMMatrixRotationY(-speed * static_cast<float>(delta_time));
-			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 		}
 		else if (keystate[inputMap['a']] == true)
 		{
-			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 			(DirectX::XMMATRIX&)mx1 *= DirectX::XMMatrixRotationY(speed * static_cast<float>(delta_time));
-			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
 		}
+		float3 eye = mx2[3].xyz;
+		float3 at  = mx1[3].xyz;
+		float3 up  = { 0.0f, 1.0f, 0.0f };
+
+		mx2 = matrix_look_at(eye, at, up);
 	}
 
 	void dev_app_t::update_camera()
@@ -252,14 +256,38 @@ namespace end
 		// do some camera stuff
 	}
 
-	void dev_app_t::matrix_turn_to()
+	float4x4 dev_app_t::matrix_look_at(float3 _viewerPos, float3 _targetPos, float3 _localUp)
 	{
-		// need up/down rotation matrix
-		// need left/right rotation matrix
-	}
-	void dev_app_t:: matrix_look_at()
-	{
+		float4x4 temp;
+		DirectX::XMVECTOR x;
+		DirectX::XMVECTOR y;
+		DirectX::XMVECTOR z;
 
+		// Define vector between target and viewer
+		z = DirectX::XMVectorSubtract((DirectX::XMVECTOR&)_targetPos, (DirectX::XMVECTOR&)_viewerPos);
+		DirectX::XMVector3Normalize(z);
+
+		// Define Up
+		x = DirectX::XMVector3Cross((DirectX::XMVECTOR&)_localUp, (DirectX::XMVECTOR&)z);
+		DirectX::XMVector3Normalize(x);
+
+		// Calculate new Y
+		y = DirectX::XMVector3Cross(z, x);
+		DirectX::XMVector3Normalize(y);
+
+		temp[0].xyz = (float3&)x;
+		temp[1].xyz = (float3&)y;
+		temp[2].xyz = (float3&)z;
+		temp[3].xyz = _viewerPos;
+
+		return temp;
+	}
+
+	float4x4 dev_app_t::matrix_turn_to(float4x4 _viewer, float3 _targetPos, float _speed)
+	{
+		//a copy paste of look at but using existing z axis
+		float4x4 temp;
+		return temp;
 	}
 
 	float dev_app_t::RandNumToNum(float _a, float _b)
