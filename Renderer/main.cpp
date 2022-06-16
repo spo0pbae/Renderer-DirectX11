@@ -2,6 +2,7 @@
 // compile with: /D_UNICODE /DUNICODE /DWIN32 /D_WINDOWS /c
 
 #include <windows.h>
+#include <windowsx.h>
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
@@ -182,7 +183,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_MOUSEMOVE:
 		{
 			//std::cout << "mouse moved" << std::endl;
-			//end::keystate[(int)wParam] = true;
+			end::mouseX = static_cast<float>(GET_X_LPARAM(lParam));
+			end::mouseY = static_cast<float>(GET_Y_LPARAM(lParam));
+
+			std::cout << "X: " << end::mouseX << std::endl << "Y: " << end::mouseY << std::endl;
+
 			break;
 		}
 		default:
@@ -263,6 +268,7 @@ MSG begin_main_loop()
 		}
 		else
 		{
+			dev_app.cam = &renderer.default_view;
 			dev_app.update();
 			renderer.draw();
 		}

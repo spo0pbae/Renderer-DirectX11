@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "dev_app.h"
-#include "math_types.h"
 #include "debug_renderer.h"
 
 namespace end
@@ -68,7 +67,7 @@ namespace end
 	void dev_app_t::update()
 	{
 		delta_time = calc_delta_time();
-		float colorTime = delta_time;
+		float colorTime = delta_time * 0.5f;
 
 		// Draw grid
 		end:debug_renderer::create_grid(10, gridCol);
@@ -249,15 +248,12 @@ namespace end
 		float3 up  = { 0.0f, 1.0f, 0.0f };
 
 		mx2 = matrix_look_at(eye, at, up);
-	}
-
-	void dev_app_t::update_camera()
-	{
-		// do some camera stuff
+		mx3 = matrix_turn_to(mx3, at, delta_time);
 	}
 
 	float4x4 dev_app_t::matrix_look_at(float3 _viewerPos, float3 _targetPos, float3 _localUp)
 	{
+		// new rotaton matrix to return
 		float4x4 temp;
 		DirectX::XMVECTOR x;
 		DirectX::XMVECTOR y;
@@ -265,15 +261,15 @@ namespace end
 
 		// Define vector between target and viewer
 		z = DirectX::XMVectorSubtract((DirectX::XMVECTOR&)_targetPos, (DirectX::XMVECTOR&)_viewerPos);
-		DirectX::XMVector3Normalize(z);
+		z = DirectX::XMVector3Normalize(z);
 
 		// Define Up
 		x = DirectX::XMVector3Cross((DirectX::XMVECTOR&)_localUp, (DirectX::XMVECTOR&)z);
-		DirectX::XMVector3Normalize(x);
+		x = DirectX::XMVector3Normalize(x);
 
 		// Calculate new Y
 		y = DirectX::XMVector3Cross(z, x);
-		DirectX::XMVector3Normalize(y);
+		y = DirectX::XMVector3Normalize(y);
 
 		temp[0].xyz = (float3&)x;
 		temp[1].xyz = (float3&)y;
@@ -283,11 +279,55 @@ namespace end
 		return temp;
 	}
 
-	float4x4 dev_app_t::matrix_turn_to(float4x4 _viewer, float3 _targetPos, float _speed)
+	float4x4 dev_app_t::matrix_turn_to(float4x4 _viewer, float3 _targetPos, float _rotationSpeed)
 	{
-		//a copy paste of look at but using existing z axis
-		float4x4 temp;
+		float4x4 temp = _viewer;
+		DirectX::XMVECTOR x;
+		DirectX::XMVECTOR y;
+
+		// rotation matrices
+		DirectX::XMMATRIX rotY	= DirectX::XMMatrixIdentity();
+		DirectX::XMMATRIX rotX	= DirectX::XMMatrixIdentity();
+
+		// viewer stuff
+		DirectX::XMVECTOR v;
+		DirectX::XMVECTOR viewerNorm	= (DirectX::XMVECTOR&)temp[0].xyz; // viewer's x axis
+		DirectX::XMVECTOR viewerZ		= (DirectX::XMVECTOR&)temp[2].xyz;
+		DirectX::XMVECTOR viewerPos		= (DirectX::XMVECTOR&)temp[3].xyz;
+
+		// Define vector between target and viewer
+		v = DirectX::XMVectorSubtract((DirectX::XMVECTOR&)_targetPos, (DirectX::XMVECTOR&)viewerPos);
+		v = DirectX::XMVector3Normalize(v);
+
+		// Define Up
+		x = DirectX::XMVector3Cross({ 0.0f, 1.0f, 0.0f }, viewerZ);
+		x = DirectX::XMVector3Normalize(x);
+
+		// Calculate new Y
+		y = DirectX::XMVector3Cross(viewerZ, x);
+		y = DirectX::XMVector3Normalize(y);
+
+		temp[0].xyz = (float3&)x;
+		temp[1].xyz = (float3&)y;
+		temp[2].xyz = (float3&)viewerZ;
+
+		// Calculate turn rate
+		DirectX::XMVECTOR direction = DirectX::XMVector3Dot(v, viewerNorm);
+
+		// rotate on Y and X
+		rotY = DirectX::XMMatrixRotationY(DirectX::XMVectorGetY(direction) * _rotationSpeed);
+		(DirectX::XMMATRIX&)temp = DirectX::XMMatrixMultiply(rotY, (DirectX::XMMATRIX&)temp);
+
+		rotX = DirectX::XMMatrixRotationX(DirectX::XMVectorGetX(direction) * _rotationSpeed);
+		(DirectX::XMMATRIX&)temp = DirectX::XMMatrixMultiply(rotX, (DirectX::XMMATRIX&)temp);
+
 		return temp;
+	}
+
+	void dev_app_t::update_camera()
+	{
+		// do some camera stuff
+		float mouseDelta = 0.0f;
 	}
 
 	float dev_app_t::RandNumToNum(float _a, float _b)

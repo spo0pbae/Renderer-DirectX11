@@ -16,4 +16,8 @@ namespace end
 	// Otherwise compiler throws a linker error for duplicate definitions (LNK2005) (LNK1169)
 	__declspec(selectany) std::bitset<end::e_input::COUNT>	keystate;
 	__declspec(selectany) std::array<end::e_input, 256>		inputMap;
+
+	// Mouse stuff
+	__declspec(selectany) float mouseX = 0;
+	__declspec(selectany) float mouseY = 0;
 }

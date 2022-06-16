@@ -1,8 +1,8 @@
 #pragma once
 #include <cstdint>
 #include <chrono>
-//#include <WinUser.h>
 
+#include "view.h"
 #include "InputMap.h"
 #include "Emitters.h"
 
@@ -21,6 +21,8 @@ namespace end
 		float4x4 mx2;
 		float4x4 mx3;
 
+		view_t* cam; // used to get camera from renderer.h via setting in main.cpp
+
 		// constructor
 		dev_app_t();
 
@@ -32,7 +34,7 @@ namespace end
 		void update_camera();
 
 		float4x4 matrix_look_at(float3 _viewerPos, float3 _targetPos, float3 _localUp);
-		float4x4 matrix_turn_to(float4x4 _viewer, float3 _targetPos, float _speed);
+		float4x4 matrix_turn_to(float4x4 _viewer, float3 _targetPos, float _rotationSpeed);
 
 		// math helper functions
 		float RandNumToNum(float _a, float _b);
