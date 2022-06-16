@@ -62,7 +62,7 @@
     <ClInclude Include="Emitters.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InputMap.h">
+    <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

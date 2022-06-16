@@ -1,23 +1,20 @@
 #pragma once
+
+// prevent C++ from opening twice
+#ifndef INPUT_H
+#define INPUT_H
+
 #include <bitset>
-#include <array>
+
 namespace end
 {
-	enum e_input
-	{
-		FWD = 0,
-		BACK,
-		LEFT,
-		RIGHT,
-		COUNT
-	};
-
 	// Tells linker to pick one definition for use by all external references and to discard the rest
-	// Otherwise compiler throws a linker error for duplicate definitions (LNK2005) (LNK1169)
-	__declspec(selectany) std::bitset<end::e_input::COUNT>	keystate;
-	__declspec(selectany) std::array<end::e_input, 256>		inputMap;
+	// Otherwise linker error (LNK2005) (LNK1169)
+	__declspec(selectany) std::bitset<256>	keys;
 
 	// Mouse stuff
-	__declspec(selectany) float mouseX = 0;
-	__declspec(selectany) float mouseY = 0;
+	__declspec(selectany) float currMouseX = 0;
+	__declspec(selectany) float currMouseY = 0;
 }
+
+#endif

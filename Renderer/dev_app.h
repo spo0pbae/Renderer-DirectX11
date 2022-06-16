@@ -1,9 +1,13 @@
 #pragma once
+
+#ifndef DEV_APP_H
+#define DEV_APP_H
+
 #include <cstdint>
 #include <chrono>
 
 #include "view.h"
-#include "InputMap.h"
+#include "Input.h"
 #include "Emitters.h"
 
 namespace end
@@ -31,7 +35,12 @@ namespace end
 
 		double get_delta_time()const;
 		void update();
-		void update_camera();
+
+		void move_transform();
+		void move_camera();
+
+
+		float4x4_a mouse_look(float4x4_a _viewMx, float deltaX, float deltaY);
 
 		float4x4 matrix_look_at(float3 _viewerPos, float3 _targetPos, float3 _localUp);
 		float4x4 matrix_turn_to(float4x4 _viewer, float3 _targetPos, float _rotationSpeed);
@@ -41,3 +50,5 @@ namespace end
 		float DegreesToRadians(float _angle);
 	};
 }
+
+#endif
