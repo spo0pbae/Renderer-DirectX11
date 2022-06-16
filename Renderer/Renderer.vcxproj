@@ -151,7 +151,7 @@
     <ClInclude Include="debug_renderer.h" />
     <ClInclude Include="dev_app.h" />
     <ClInclude Include="Emitters.h" />
-    <ClInclude Include="InputMap.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="math_types.h" />
     <ClInclude Include="pools.h" />
     <ClInclude Include="renderer.h" />

@@ -3,7 +3,7 @@
 #include <chrono>
 
 #include "view.h"
-#include "InputMap.h"
+#include "Input.h"
 #include "Emitters.h"
 
 namespace end
