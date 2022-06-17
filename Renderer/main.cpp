@@ -152,41 +152,41 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_KEYDOWN:
 		{
-			end::keystate[end::inputMap[(int)wParam]] = true;
+			end::keys[(int)wParam] = true;
 			break;
 		}
 		case WM_KEYUP:
 		{
-			end::keystate[end::inputMap[(int)wParam]] = false;
+			end::keys[(int)wParam] = false;
 			break;
 		}
 		case WM_LBUTTONDOWN:
 		{
-			end::keystate[end::inputMap[(int)wParam]] = true;
+			end::keys[(int)wParam] = true;
 			break;
 		}
 		case WM_LBUTTONUP:
 		{
-			end::keystate[end::inputMap[(int)wParam]] = false;
+			end::keys[(int)wParam] = false;
 			break;
 		}
 		case WM_RBUTTONDOWN:
 		{
-			end::keystate[end::inputMap[(int)wParam]] = true;
+			end::keys[(int)wParam] = true;
 			break;
 		}
 		case WM_RBUTTONUP:
 		{
-			end::keystate[end::inputMap[(int)wParam]] = false;
+			end::keys[(int)wParam] = false;
 			break;
 		}
 		case WM_MOUSEMOVE:
 		{
 			//std::cout << "mouse moved" << std::endl;
-			end::mouseX = static_cast<float>(GET_X_LPARAM(lParam));
-			end::mouseY = static_cast<float>(GET_Y_LPARAM(lParam));
+			end::currMouseX = GET_X_LPARAM(lParam);
+			end::currMouseY = GET_Y_LPARAM(lParam);
 
-			std::cout << "X: " << end::mouseX << std::endl << "Y: " << end::mouseY << std::endl;
+			std::cout << "X: " << end::currMouseX << std::endl << "Y: " << end::currMouseY << std::endl;
 
 			break;
 		}

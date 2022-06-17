@@ -25,23 +25,6 @@ namespace end
 
 	void dev_app_t::init_content()
 	{
-		// Init keystates
-		inputMap['w'] = e_input::FWD;
-		inputMap[87]  = e_input::FWD;
-		inputMap[38]  = e_input::FWD;	// up arrow
-
-		inputMap['s'] = e_input::BACK;
-		inputMap[83]  = e_input::BACK;
-		inputMap[40]  = e_input::BACK;	// down arrow
-
-		inputMap['d'] = e_input::RIGHT;
-		inputMap[68]  = e_input::RIGHT;
-		inputMap[39]  = e_input::RIGHT; // right arrow
-
-		inputMap['a'] = e_input::LEFT;
-		inputMap[65]  = e_input::LEFT;
-		inputMap[37]  = e_input::LEFT;	// left arrow
-
 		// Initialize matrix positions
 		(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixIdentity();
 		mx1[3].xyz = { 0.0f, 0.1f, 0.0f };
@@ -67,30 +50,15 @@ namespace end
 	void dev_app_t::update()
 	{
 		delta_time = calc_delta_time();
-		float colorTime = delta_time * 0.5f;
 
 		// Draw grid
 		end:debug_renderer::create_grid(10, gridCol);
 
-		// TODO: do your updates here
-		// color updates
-		if (colorFlag == true)
-			colorTime = -colorTime;
-		else
-			gridCol[0] += colorTime; // update red if flag is false
-
-		// always update blue
-		gridCol[2] += colorTime;
-
-		if (gridCol[2] >= 0.75f)
-			colorFlag = true;
-		else if (gridCol[2] <= 0.15f)
-			colorFlag = false;
-
-		int spawnCount = 3;
+		update_grid_color();
 
 		// LAB 1 PARTICLES
 #if 0
+		int spawnCount = 3;
 		center.spawnCol = { 1.0f, 1.0f, 1.0f, 1.0f };
 		center.spawnPos = { 0.0f, 0.0f, 0.0f };			// The location the particles originate?
 
@@ -210,45 +178,60 @@ namespace end
 		}
 #endif
 
-		// LAB 2 TRANSFORMS
+		// LAB 2 MATRIX BEHAVIOURS
+		// Draw transforms
 		end::debug_renderer::add_matrix_transform(mx1);
 		end::debug_renderer::add_matrix_transform(mx2);
 		end::debug_renderer::add_matrix_transform(mx3);
 
-		float speed = 2.0f;
-		float3 translation{0.0f, 0.0f, 1.0f * speed * static_cast<float>(delta_time) };
+		// Handle movement inputs for matrix transform and camera
+		const float speed		= 2.0f;
+		const float camSpeed	= 5.0f;
+		move_transform(speed);
+		move_camera(camSpeed);
 
-		if (keystate[inputMap['w']] == true)
-		{
-			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
-			mx1[3].z -= 1.0f * speed * static_cast<float>(delta_time);
-			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
-		}
-		else if (keystate[inputMap['s']] == true)
-		{
-			// translates along world z...
-			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
-			mx1[3].z += 1.0f * speed * static_cast<float>(delta_time);
-			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
-		}
-		else if (keystate[inputMap['d']] == true)
-		{
-			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({0}, (DirectX::XMMATRIX&)mx1);
-			(DirectX::XMMATRIX&)mx1 *= DirectX::XMMatrixRotationY(-speed * static_cast<float>(delta_time));
-			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
-		}
-		else if (keystate[inputMap['a']] == true)
-		{
-			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
-			(DirectX::XMMATRIX&)mx1 *= DirectX::XMMatrixRotationY(speed * static_cast<float>(delta_time));
-			(DirectX::XMMATRIX&)mx1 =  DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
-		}
+		// Look-At and Turn-To
 		float3 eye = mx2[3].xyz;
 		float3 at  = mx1[3].xyz;
 		float3 up  = { 0.0f, 1.0f, 0.0f };
 
 		mx2 = matrix_look_at(eye, at, up);
 		mx3 = matrix_turn_to(mx3, at, delta_time);
+
+		// MOUSE
+		/*	
+			Save current mouse pos returned from messages like WM_MOUSEMOVE.
+			After all messages have been processed:
+				delta = pos - prevPos
+				prevPos = pos 
+		*/
+
+		float prevPosX = 0.0f;
+		float prevPosY = 0.0f;
+
+		float deltaX = currMouseX - prevPosX;
+		prevPosX = currMouseX;
+
+		float deltaY = currMouseY - prevPosY;
+		prevPosY = currMouseY;
+
+		//cam->view_mat = mouse_look(cam->view_mat, deltaX, deltaY);
+	}
+
+	void dev_app_t::update_grid_color()
+	{
+		float colorTime = delta_time * 0.25f;
+
+		// check to see if we need to change flag
+		if (gridCol[2] >= 0.75f) colorFlag = true;	
+		else if (gridCol[2] <= 0.15f) colorFlag = false;
+	
+		// update color based on flag
+		if (colorFlag == true) colorTime = -colorTime;
+		else gridCol[0] += colorTime;
+		
+		// always update blue
+		gridCol[2] += colorTime;
 	}
 
 	float4x4 dev_app_t::matrix_look_at(float3 _viewerPos, float3 _targetPos, float3 _localUp)
@@ -299,17 +282,17 @@ namespace end
 		v = DirectX::XMVectorSubtract((DirectX::XMVECTOR&)_targetPos, (DirectX::XMVECTOR&)viewerPos);
 		v = DirectX::XMVector3Normalize(v);
 
-		// Define Up
-		x = DirectX::XMVector3Cross({ 0.0f, 1.0f, 0.0f }, viewerZ);
-		x = DirectX::XMVector3Normalize(x);
-
-		// Calculate new Y
-		y = DirectX::XMVector3Cross(viewerZ, x);
-		y = DirectX::XMVector3Normalize(y);
-
-		temp[0].xyz = (float3&)x;
-		temp[1].xyz = (float3&)y;
-		temp[2].xyz = (float3&)viewerZ;
+		//// Define Up
+		//x = DirectX::XMVector3Cross({ 0.0f, 1.0f, 0.0f }, v);
+		//x = DirectX::XMVector3Normalize(x);
+		//
+		//// Calculate new Y
+		//y = DirectX::XMVector3Cross(viewerZ, x);
+		//y = DirectX::XMVector3Normalize(y);
+		//
+		//temp[0].xyz = (float3&)x;
+		//temp[1].xyz = (float3&)y;
+		//temp[2].xyz = (float3&)v;
 
 		// Calculate turn rate
 		DirectX::XMVECTOR direction = DirectX::XMVector3Dot(v, viewerNorm);
@@ -324,10 +307,80 @@ namespace end
 		return temp;
 	}
 
-	void dev_app_t::update_camera()
+	// Translates matrix transform along X/Z
+	void dev_app_t::move_transform(const float _speed)
 	{
-		// do some camera stuff
-		float mouseDelta = 0.0f;
+		if (keys[38] == true)
+		{
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			mx1[3].z -= 1.0f * _speed * static_cast<float>(delta_time);
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+		}
+		else if (keys[40] == true)
+		{
+			// translates along world z...
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			mx1[3].z += 1.0f * _speed * static_cast<float>(delta_time);
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+		}
+		else if (keys[39] == true)
+		{
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 *= DirectX::XMMatrixRotationY(-_speed * static_cast<float>(delta_time));
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+		}
+		else if (keys[37] == true)
+		{
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+			(DirectX::XMMATRIX&)mx1 *= DirectX::XMMatrixRotationY(_speed * static_cast<float>(delta_time));
+			(DirectX::XMMATRIX&)mx1 = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)mx1);
+		}
+	}
+
+	// Translates camera along X/Z
+	void dev_app_t::move_camera(const float _speed)
+	{
+		if (keys[87] == true)//W
+		{
+			(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
+			cam->view_mat[3].z -= 1.0f * _speed * static_cast<float>(delta_time);
+			(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
+		}
+		else if (keys[83] == true)//S
+		{
+			(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
+			cam->view_mat[3].z += 1.0f * _speed * static_cast<float>(delta_time);
+			(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
+		}
+		else if (keys[68] == true)//D
+		{
+			(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
+			cam->view_mat[3].x -= 1.0f * _speed * static_cast<float>(delta_time);
+			(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
+		}
+		else if (keys[65] == true)//A
+		{
+			(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
+			cam->view_mat[3].x += 1.0f * _speed * static_cast<float>(delta_time);
+			(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
+		}
+	}
+
+	float4x4_a dev_app_t::mouse_look(float4x4_a _viewMx, float deltaX, float deltaY)
+	{
+		float4x4_a temp = _viewMx;
+		float4_a pos = _viewMx[3];
+
+		// inverse copy of the view matrix
+		//(DirectX::XMMATRIX&)temp = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)temp);
+
+		(DirectX::XMMATRIX&)temp = DirectX::XMMatrixRotationX(deltaY);
+		(DirectX::XMMATRIX&)temp = DirectX::XMMatrixRotationY(deltaX);
+
+		//(DirectX::XMMATRIX&)temp = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)temp);
+
+		//temp[3] = pos;
+		return temp;
 	}
 
 	float dev_app_t::RandNumToNum(float _a, float _b)

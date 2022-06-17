@@ -196,7 +196,7 @@ namespace end
 			// Setup swapchain
 			DXGI_SWAP_CHAIN_DESC sd;
 			ZeroMemory(&sd, sizeof(sd));
-			sd.BufferCount							= 1;
+			sd.BufferCount							= 1; // double buffering
 			sd.BufferDesc.Width						= crect.right;
 			sd.BufferDesc.Height					= crect.bottom;
 			sd.BufferDesc.Format					= DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -204,8 +204,8 @@ namespace end
 			sd.BufferDesc.RefreshRate.Denominator	= 1;
 			sd.BufferUsage							= DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			sd.OutputWindow							= hwnd;
-			sd.SampleDesc.Count						= 1;
-			sd.SampleDesc.Quality					= 0;
+			sd.SampleDesc.Count						= 1;	// these two parameters
+			sd.SampleDesc.Quality					= 0;	// specify no anti-ailiasing 
 			sd.Windowed								= TRUE;
 
 			D3D_FEATURE_LEVEL  FeatureLevelsSupported;

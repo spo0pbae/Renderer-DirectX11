@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef EMITTERS_H
+#define EMITTERS_H
+
 #include "math_types.h"
 #include "pools.h"
 
@@ -30,3 +34,5 @@ namespace end
 		sorted_pool_t<particle, 1024> sortedPool;
 	};
 }
+
+#endif
