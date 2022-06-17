@@ -30,20 +30,17 @@ namespace end
 		// constructor
 		dev_app_t();
 
-		void init_content();
-		//void set_rotation(float4x4 _rot, float4x4 _mx);
-
 		double get_delta_time()const;
+
 		void update();
-
-		void move_transform();
-		void move_camera();
-
-
-		float4x4_a mouse_look(float4x4_a _viewMx, float deltaX, float deltaY);
+		void init_content();
+		void update_grid_color();
+		void move_transform(const float _speed);
+		void move_camera(const float _speed);
 
 		float4x4 matrix_look_at(float3 _viewerPos, float3 _targetPos, float3 _localUp);
 		float4x4 matrix_turn_to(float4x4 _viewer, float3 _targetPos, float _rotationSpeed);
+		float4x4_a mouse_look(float4x4_a _viewMx, float deltaX, float deltaY);
 
 		// math helper functions
 		float RandNumToNum(float _a, float _b);
