@@ -1,6 +1,8 @@
-#pragma once
+#ifndef D3D11_RENDERER_IMPL_H
+#define D3D11_RENDERER_IMPL_H
 
-#define WIN32_LEAN_AND_MEAN
+// Exclude a bunch of headers from windows.h
+#define WIN32_LEAN_AND_MEAN 
 #include <Windows.h>
 #include <dxgi1_2.h>
 #include <d3d11_2.h>
@@ -25,7 +27,7 @@ namespace
 		if (t)
 			t->Release();
 	}
-}
+} // namespace
 
 namespace end
 {
@@ -140,7 +142,6 @@ namespace end
 
 		~impl_t()
 		{
-			// TODO:
 			// Clean-up
 			// In general, release objects in reverse order of creation
 			for (auto& ptr : constant_buffer)
@@ -406,4 +407,6 @@ namespace end
 			device->CreateBuffer(&debug_desc, &debug_srd, &vertex_buffer[VERTEX_BUFFER::COLORED_VERTEX]);
 		}
 	};
-}
+}//namespace end
+
+#endif

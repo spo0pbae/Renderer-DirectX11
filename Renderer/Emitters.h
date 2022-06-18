@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef EMITTERS_H
 #define EMITTERS_H
 
@@ -33,6 +31,6 @@ namespace end
 		float4 spawnCol;
 		sorted_pool_t<particle, 1024> sortedPool;
 	};
-}
+}// namespace end
 
 #endif

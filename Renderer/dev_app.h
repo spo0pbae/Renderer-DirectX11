@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef DEV_APP_H
 #define DEV_APP_H
 
@@ -25,7 +23,7 @@ namespace end
 		float4x4 mx2;
 		float4x4 mx3;
 
-		view_t* cam; // used to get camera from renderer.h via setting in main.cpp
+		view_t* cam; // used to get camera from renderer.h
 
 		// constructor
 		dev_app_t();
@@ -49,6 +47,7 @@ namespace end
 		float RandNumToNum(float _a, float _b);
 		float DegreesToRadians(float _angle);
 	};
-}
+
+}// namespace end
 
 #endif

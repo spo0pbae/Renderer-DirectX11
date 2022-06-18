@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MATH_TYPES_H
+#define MATH_TYPES_H
+
 #include <array>
 #include <cstdint>
 #include <DirectXMath.h>
@@ -267,3 +269,4 @@ namespace end
 		inline colored_vertex(const float3& p, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) : pos{ p }, color{ r/255.0f, g/255.0f, b/255.0f, a/255.0f } {}
 	};
 }
+#endif

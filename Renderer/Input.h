@@ -1,6 +1,3 @@
-#pragma once
-
-// prevent C++ from opening twice
 #ifndef INPUT_H
 #define INPUT_H
 
@@ -18,6 +15,7 @@ namespace end
 	__declspec(selectany) float currMouseY = 0.0f;
 	__declspec(selectany) float prevMouseX = 0.0f;
 	__declspec(selectany) float prevMouseY = 0.0f;
-}
+
+}// namespace end
 
 #endif

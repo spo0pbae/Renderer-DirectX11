@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DEBUG_RENDERER_H
+#define DEBUG_RENDERER_H
+
 #include "math_types.h"
 
 // Interface to the debug renderer
@@ -15,4 +17,6 @@ namespace end
 		void add_matrix_transform(const float4x4&);
 		void create_grid(float _size, float4 _color);
 	}
-}
+} // namespace end
+
+#endif

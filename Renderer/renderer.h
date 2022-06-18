@@ -1,4 +1,6 @@
-#pragma once
+#ifndef RENDERER_H
+#define RENDERER_H
+
 #include <memory>
 #include "view.h"
 
@@ -88,4 +90,6 @@ namespace end
 
 	enum STATE_BLEND{ DEFAULT = 0, COUNT };
 	*/
-}
+}// namespace end
+
+#endif

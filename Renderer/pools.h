@@ -1,17 +1,10 @@
-#pragma once
+#ifndef POOLS_H
+#define POOLS_H
+
 #include <type_traits>
 #include <array>
 #include <cassert>
 
-// some tips
-// freepool[index] = p;
-// call allocate on free pool to give you index of particle activated in the free pool
-// for each emitter loop through that emitters indices
-// for each index find the corresponding particle and update
-// free pool is master list of particles, dont want to loop through that, want to loop through the sorted pool
-
-// one emitter in center using a sorted pool
-// 4 emitter in corners to share a free pool
 namespace end
 {
 	template<typename T, int16_t N>
@@ -132,3 +125,5 @@ namespace end
 	}; // pool_t 
 
 } // namespace end
+
+#endif

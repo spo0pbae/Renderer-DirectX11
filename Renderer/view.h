@@ -1,4 +1,5 @@
-#pragma once
+#ifndef VIEW_H
+#define VIEW_H
 
 #include "math_types.h"
 
@@ -24,4 +25,6 @@ namespace end
 		// maintains a visible-set of renderable objects in view (implemented in a future assignment)
 		view_t() {}
 	};
-}
+} // namespace end
+
+#endif
