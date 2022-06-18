@@ -42,7 +42,7 @@ namespace end
 		float4x4 matrix_look_at(float4 _viewerPos, float4 _targetPos, float4 _localUp);
 		float4x4 matrix_turn_to(float4x4 _viewer, float4 _targetPos, float _rotationSpeed);
 		float4x4 matrix_orthonormalize(float4x4 _mx, float4 _up);
-		float4x4_a matrix_orthonormalize_a(float4x4_a _mx);
+		float4x4_a matrix_orthonormalize_a(float4x4_a _mx, float4 _worldUp);
 		float4x4_a mouse_look(float4x4_a _viewMx, float _deltaX, float _deltaY, float _sensitivity);
 
 		// math helper functions

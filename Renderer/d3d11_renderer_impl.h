@@ -55,7 +55,6 @@ namespace end
 
 		/* Add more as needed...
 		ID3D11SamplerState*			sampler_state[STATE_SAMPLER::COUNT]{};
-
 		ID3D11BlendState*			blend_state[STATE_BLEND::COUNT]{};
 		*/
 

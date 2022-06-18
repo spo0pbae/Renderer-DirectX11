@@ -13,6 +13,7 @@
 #include "dev_app.h"
 
 // Global variables
+bool g_firstFrame = true;
 
 // The main window class name.
 static TCHAR szWindowClass[] = _T("DesktopApp");
@@ -162,24 +163,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_LBUTTONDOWN:
 		{
+			//std::cout << "SetCapture turned on!" << std::endl;
 			SetCapture(hWnd);
-			//end::keys[(int)wParam] = true;
 			break;
 		}
 		case WM_LBUTTONUP:
 		{
-			//end::keys[(int)wParam] = false;
 			break;
 		}
 		case WM_RBUTTONDOWN:
 		{
+			//std::cout << "Capture released!" << std::endl;
 			ReleaseCapture();
-			//end::keys[(int)wParam] = true;
 			break;
 		}
 		case WM_RBUTTONUP:
 		{
-			//end::keys[(int)wParam] = false;
 			break;
 		}
 		case WM_MOUSEMOVE:
@@ -187,13 +186,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			float mX = GET_X_LPARAM(lParam);
 			float mY = GET_Y_LPARAM(lParam);
 
+			// Check if first frame to prevent 
+			// large delta gap on startup
+			if (g_firstFrame == true)
+			{
+				end::prevMouseX = mX;
+				end::prevMouseY = mY;
+				g_firstFrame = false;
+			}
+
 			if (mX != end::currMouseX)
 				end::currMouseX = mX;
-
 			if (mY != end::currMouseY)
 				end::currMouseY = mY;
 
-			std::cout << "X: " << end::currMouseX << "\t" << "Y: " << end::currMouseY << std::endl;
+			//std::cout << "X: " << end::currMouseX << "\t" 
+			//		    << "Y: " << end::currMouseY << std::endl;
 			break;
 		}
 		default:

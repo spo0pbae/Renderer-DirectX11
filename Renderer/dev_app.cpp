@@ -194,7 +194,7 @@ namespace end
 		float deltaY = currMouseY - prevMouseY;
 		prevMouseY = currMouseY;
 
-		float sens = 0.003;
+		float sens = 0.003f;
 		cam->view_mat = mouse_look(cam->view_mat, deltaX, deltaY, sens);
 	}
 
@@ -216,8 +216,6 @@ namespace end
 
 	float4x4 dev_app_t::matrix_look_at(float4 _viewerPos, float4 _targetPos, float4 _localUp)
 	{
-		// new rotaton matrix to return
-		float4x4 temp;
 		DirectX::XMVECTOR x, y, z;
 
 		// Define vector between target and viewer
@@ -232,11 +230,13 @@ namespace end
 		y = DirectX::XMVector3Cross(z, x);
 		y = DirectX::XMVector4Normalize(y);
 
-		temp[0] = (float4&)x;
-		temp[1] = (float4&)y;
-		temp[2] = (float4&)z;
-		temp[3] = _viewerPos;
-
+		float4x4 temp =
+		{
+			(float4&)x,
+			(float4&)y,
+			(float4&)z,
+			_viewerPos
+		};
 		return temp;
 	}
 
@@ -258,14 +258,13 @@ namespace end
 
 		// rotate on Y and X
 		DirectX::XMMATRIX rotY = DirectX::XMMatrixRotationY(DirectX::XMVectorGetY(directionRateY) * _rotationSpeed);
-		DirectX::XMMATRIX rotX = DirectX::XMMatrixRotationX(DirectX::XMVectorGetX(directionRateX) * -_rotationSpeed);
+		DirectX::XMMATRIX rotX = DirectX::XMMatrixRotationX(-DirectX::XMVectorGetX(directionRateX) * _rotationSpeed);
 
 		(DirectX::XMMATRIX&)temp = DirectX::XMMatrixMultiply(rotY, (DirectX::XMMATRIX&)temp);
 		(DirectX::XMMATRIX&)temp = DirectX::XMMatrixMultiply(rotX, (DirectX::XMMATRIX&)temp);
 
 		// orthonormalize to keep the matrix upright
-		//return matrix_orthonormalize(temp, temp[1]);
-		return temp;
+		return matrix_orthonormalize(temp, temp[1]);
 	}
 
 	float4x4 dev_app_t::matrix_orthonormalize(float4x4 _mx, float4 _up)
@@ -291,14 +290,14 @@ namespace end
 		return temp;
 	}
 
-	float4x4_a dev_app_t::matrix_orthonormalize_a(float4x4_a _mx)
+	float4x4_a dev_app_t::matrix_orthonormalize_a(float4x4_a _mx, float4 _worldUp)
 	{
 		DirectX::XMVECTOR z, x, y;
 
 		z = (DirectX::XMVECTOR&)_mx[2];
 		z = DirectX::XMVector4Normalize(z);
 
-		x = DirectX::XMVector3Cross({0.0f, 1.0f, 0.0f, 0.0f}, z);
+		x = DirectX::XMVector3Cross((DirectX::XMVECTOR&)_worldUp, z);
 		x = DirectX::XMVector4Normalize(x);
 
 		y = DirectX::XMVector3Cross(z, x);
@@ -357,6 +356,14 @@ namespace end
 		{
 			cam->view_mat[3].x += _speed * static_cast<float>(delta_time);
 		}
+		else if (keys[32] == true)	// SPACE
+		{
+			cam->view_mat[3].y -= _speed * static_cast<float>(delta_time);
+		}
+		else if (keys[16] == true)	// LSHIFT
+		{
+			cam->view_mat[3].y += _speed * static_cast<float>(delta_time);
+		}
 		(DirectX::XMMATRIX&)cam->view_mat = DirectX::XMMatrixInverse({ 0 }, (DirectX::XMMATRIX&)cam->view_mat);
 	}
 
@@ -370,7 +377,7 @@ namespace end
 		(DirectX::XMMATRIX&)temp = DirectX::XMMatrixMultiply(rotX, (DirectX::XMMATRIX&)temp);
 		(DirectX::XMMATRIX&)temp = DirectX::XMMatrixMultiply(rotY, (DirectX::XMMATRIX&)temp);
 
-		return matrix_orthonormalize_a(temp);
+		return matrix_orthonormalize_a(temp, {0.0f, 1.0f, 0.0f, 0.0f});
 	}
 
 	float dev_app_t::RandNumToNum(float _a, float _b)

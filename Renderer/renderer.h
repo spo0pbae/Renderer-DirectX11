@@ -26,7 +26,6 @@ namespace end
 		view_t default_view;
 
 	private:
-
 		// PImpl idiom ("Pointer to implementation")
 
 		// 'impl' will define the implementation for the renderer elsewhere
@@ -36,7 +35,7 @@ namespace end
 		impl_t* p_impl = nullptr;
 	};
 
-	// The following types just defines scopes for enum values.
+	// The following types just define scopes for enum values.
 	// The enum values can be used as indices in arrays.
 	// These enum values can be added to as needed.
 
