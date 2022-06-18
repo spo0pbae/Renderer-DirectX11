@@ -162,32 +162,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_LBUTTONDOWN:
 		{
-			end::keys[(int)wParam] = true;
+			SetCapture(hWnd);
+			//end::keys[(int)wParam] = true;
 			break;
 		}
 		case WM_LBUTTONUP:
 		{
-			end::keys[(int)wParam] = false;
+			//end::keys[(int)wParam] = false;
 			break;
 		}
 		case WM_RBUTTONDOWN:
 		{
-			end::keys[(int)wParam] = true;
+			ReleaseCapture();
+			//end::keys[(int)wParam] = true;
 			break;
 		}
 		case WM_RBUTTONUP:
 		{
-			end::keys[(int)wParam] = false;
+			//end::keys[(int)wParam] = false;
 			break;
 		}
 		case WM_MOUSEMOVE:
 		{
-			//std::cout << "mouse moved" << std::endl;
-			end::currMouseX = GET_X_LPARAM(lParam);
-			end::currMouseY = GET_Y_LPARAM(lParam);
+			float mX = GET_X_LPARAM(lParam);
+			float mY = GET_Y_LPARAM(lParam);
 
-			std::cout << "X: " << end::currMouseX << std::endl << "Y: " << end::currMouseY << std::endl;
+			if (mX != end::currMouseX)
+				end::currMouseX = mX;
 
+			if (mY != end::currMouseY)
+				end::currMouseY = mY;
+
+			std::cout << "X: " << end::currMouseX << "\t" << "Y: " << end::currMouseY << std::endl;
 			break;
 		}
 		default:
