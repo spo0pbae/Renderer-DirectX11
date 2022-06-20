@@ -88,7 +88,7 @@ namespace end
 				float4 color{ 0.0f, 0.0f, 0.0f, 1.0f };
 				color[i] = 1.0f;
 
-				// Make the Z line longer
+				// Make the Z longer
 				if (i == 2)
 				{
 					endPos = startPos + _mx[i].xyz * 1.5f;
@@ -132,5 +132,30 @@ namespace end
 				x += xS;
 			}
 		}
-	}
-}
+
+		void create_frustum(float3 _vertices[], float4 _color)
+		{
+			// Near plane
+			add_line(_vertices[0], _vertices[3], _color);
+			add_line(_vertices[1], _vertices[2], _color);
+			add_line(_vertices[0], _vertices[1], _color);
+			add_line(_vertices[3], _vertices[2], _color);
+
+			// Far plane
+			add_line(_vertices[7], _vertices[4], _color);
+			add_line(_vertices[6], _vertices[5], _color);
+			add_line(_vertices[4], _vertices[5], _color);
+			add_line(_vertices[6], _vertices[7], _color);
+
+			// Right plane
+			add_line(_vertices[7], _vertices[3], _color);
+			add_line(_vertices[6], _vertices[2], _color);
+
+			// Left plane
+			add_line(_vertices[0], _vertices[4], _color);
+			add_line(_vertices[1], _vertices[5], _color);
+		}
+
+	} // namespace debug_renderer
+
+} // namespace end

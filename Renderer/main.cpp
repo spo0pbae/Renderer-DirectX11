@@ -55,7 +55,7 @@ int CALLBACK WinMain
 	wcex.cbWndExtra		= 0;										 // Number of extra bytes to allocate following the window instance. Initialized to 0.
 	wcex.hInstance		= hInstance;								 // A handle to the instance that contains the window proc for the class. 
 	wcex.hIcon			= LoadIcon(hInstance, IDI_APPLICATION);		 // Handle to class icon. If null, system provides a default.
-	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);				 // Handle to class cursor. must be a handle to a cursor resource. 
+	wcex.hCursor		= LoadCursor(NULL, IDC_CROSS);				 // Handle to class cursor. must be a handle to a cursor resource. 
 	wcex.hbrBackground	= NULL;										 // Handle to the class background brush. Can be a handle to the brush to be used for painging. // CHANGED FROM (HBRUSH)(COLOR_WINDOW + 1) TO REMOVE FLICKER
 	wcex.lpszMenuName	= NULL;										 // Pointer to null terminated string that specifies the resource name of the class menu, as the name appears in the resource file.
 	wcex.lpszClassName	= szWindowClass;							 // Pointer to null terminated string, or an ATOM.

@@ -14,11 +14,11 @@ namespace end
 				maxDepth, topleftX, topleftY;
 	} vpData;
 
-	struct sphere_t { float3 center; float radius; }; //Alterative: using sphere_t = float4;
+	struct sphere_t { float3 center; float radius; };	//Alterative: using sphere_t = float4;
 
-	struct aabb_t { float3 center; float3 extents; }; //Alternative: aabb_t { float3 min; float3 max; };
+	struct  aabb_t { float3 min; float3 max; };			// Alternative: aabb_t { float3 center; float3 extents; };
 
-	struct plane_t { float3 normal; float offset; };  //Alterative: using plane_t = float4;
+	struct plane_t { float3 normal; float offset; };	// Alterative: using plane_t = float4;
 
 	using frustum_t = std::array<plane_t, 6>;
 
