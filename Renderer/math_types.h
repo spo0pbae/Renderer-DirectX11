@@ -256,17 +256,17 @@ namespace end
 
 namespace end
 {
-	struct colored_vertex
+	struct pixel
 	{
 		float3 pos		= { 0.0f, 0.0f, 0.0f };
 		float4 color	= { 1.0f, 1.0f, 1.0f, 1.0f };
 
-		colored_vertex() = default;
-		colored_vertex(const colored_vertex&) = default;
+		pixel() = default;
+		pixel(const pixel&) = default;
 
-		inline colored_vertex(const float3& p, const float4& c) : pos{ p }, color{ c } {}
-		inline colored_vertex(const float3& p, const float3& c) : pos{ p }, color{ c.x, c.y, c.z, 1.0f } {}
-		inline colored_vertex(const float3& p, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) : pos{ p }, color{ r/255.0f, g/255.0f, b/255.0f, a/255.0f } {}
+		inline pixel(const float3& p, const float4& c) : pos{ p }, color{ c } {}
+		inline pixel(const float3& p, const float3& c) : pos{ p }, color{ c.x, c.y, c.z, 1.0f } {}
+		inline pixel(const float3& p, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) : pos{ p }, color{ r/255.0f, g/255.0f, b/255.0f, a/255.0f } {}
 	};
 }
 #endif

@@ -2,6 +2,7 @@
 
 #include "dev_app.h"
 #include "debug_renderer.h"
+#include "frustum_culling.h"
 
 namespace end
 {
@@ -169,7 +170,7 @@ namespace end
 
 		// LAB 2 MATRIX BEHAVIOURS
 		// Draw transforms
-		end::debug_renderer::add_matrix_transform(mx1);
+		end::debug_renderer::add_matrix_transform_extended_z(mx1);
 		end::debug_renderer::add_matrix_transform(mx2);
 		end::debug_renderer::add_matrix_transform(mx3);
 

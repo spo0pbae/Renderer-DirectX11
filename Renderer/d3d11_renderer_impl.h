@@ -13,6 +13,7 @@
 #pragma comment(lib, "DXGI.lib")
 
 #include "renderer.h"
+#include "frustum_culling.h"
 #include "view.h"
 #include "blob.h"
 #include "../Renderer/shaders/mvp.hlsli"
@@ -122,7 +123,7 @@ namespace end
 
 			if (end::debug_renderer::get_line_vert_count() > 0)
 			{
-				unsigned int stride = sizeof(colored_vertex);
+				unsigned int stride = sizeof(pixel);
 				unsigned int offset = 0;
 				context->IASetVertexBuffers(0, 1, &vertex_buffer[VERTEX_BUFFER::COLORED_VERTEX], &stride, &offset);
 				context->VSSetShader(vertex_shader[VERTEX_SHADER::COLORED_VERTEX], nullptr, 0);
@@ -190,8 +191,16 @@ namespace end
 			vp.Height	= (float)crect.bottom;
 			vp.MinDepth = 0.0f;
 			vp.MaxDepth = 1.0f;
-			vp.TopLeftX = 0;
-			vp.TopLeftY = 0;
+			vp.TopLeftX = 0.0f;
+			vp.TopLeftY = 0.0f;
+
+			// set up frustum viewport data
+			vpData.width	= vp.Width;
+			vpData.height	= vp.Height;
+			vpData.minDepth = vp.MinDepth;
+			vpData.maxDepth = vp.MaxDepth;
+			vpData.topleftX = 0.0f;
+			vpData.topleftY = 0.0f;
 
 			// Setup swapchain
 			DXGI_SWAP_CHAIN_DESC sd;
@@ -392,7 +401,7 @@ namespace end
 		void create_debug_buffer() 
 		{
 			D3D11_BUFFER_DESC debug_desc = {};
-			debug_desc.ByteWidth			= end::debug_renderer::get_line_vert_capacity() * sizeof(end::colored_vertex);
+			debug_desc.ByteWidth			= end::debug_renderer::get_line_vert_capacity() * sizeof(end::pixel);
 			debug_desc.BindFlags			= D3D11_BIND_VERTEX_BUFFER;
 			debug_desc.Usage				= D3D11_USAGE_DEFAULT;
 			debug_desc.CPUAccessFlags		= 0;

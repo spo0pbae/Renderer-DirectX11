@@ -13,7 +13,7 @@ namespace
 	// CPU-side buffer of debug-line verts
 	// Copied to the GPU and reset every frame.
 	size_t line_vert_count = 0;
-	std::array<end::colored_vertex, MAX_LINE_VERTS> line_verts;
+	std::array<end::pixel, MAX_LINE_VERTS> line_verts;
 }
 
 namespace end
@@ -25,8 +25,8 @@ namespace end
 			if (line_vert_count + 2 < MAX_LINE_VERTS)
 			{
 				// Draw a line from point A to point B
-				line_verts[line_vert_count++] = colored_vertex{ point_a, color_a };
-				line_verts[line_vert_count++] = colored_vertex{ point_b, color_b };
+				line_verts[line_vert_count++] = pixel{ point_a, color_a };
+				line_verts[line_vert_count++] = pixel{ point_b, color_b };
 			}
 		}
 
@@ -37,7 +37,7 @@ namespace end
 		}
 
 		// Returns the line vert array pointer
-		const colored_vertex* get_line_verts()
+		const pixel* get_line_verts()
 		{ 
 			return line_verts.data();
 		}
@@ -54,11 +54,32 @@ namespace end
 			return MAX_LINE_VERTS;
 		}
 
-		// const?
 		void add_matrix_transform(const float4x4& _mx)
 		{
 			// matrix position
-			const float3 start = _mx[3].xyz;
+			float3 endPos;
+			const float3 startPos = _mx[3].xyz;
+
+			// for each line in the transform
+			for (int i = 0; i < 3; ++i)
+			{
+				// set the color for the respective direction (XYZ)
+				float4 color { 0.0f, 0.0f, 0.0f, 1.0f };
+				color[i] = 1.0f;
+
+				//end point == matrix.pos + i'th row
+				endPos = startPos + _mx[i].xyz;
+
+				add_line(startPos, endPos, color, color);
+			}
+		}
+
+		// const?
+		void add_matrix_transform_extended_z(const float4x4& _mx)
+		{
+			// matrix position
+			float3 endPos;
+			const float3 startPos = _mx[3].xyz;
 
 			// for each line in the transform
 			for (int i = 0; i < 3; ++i)
@@ -67,10 +88,17 @@ namespace end
 				float4 color{ 0.0f, 0.0f, 0.0f, 1.0f };
 				color[i] = 1.0f;
 
-				//end point == matrix.pos + matrix
-				float3 end = start + _mx[i].xyz;
-
-				add_line(start, end, color, color);
+				// Make the Z line longer
+				if (i == 2)
+				{
+					endPos = startPos + _mx[i].xyz * 1.5f;
+					add_line(startPos, endPos, color, { 1.0f, 1.0f, 1.0f, 1.0f });
+				}
+				else
+				{
+					endPos = startPos + _mx[i].xyz;
+					add_line(startPos, endPos, color, color);
+				}		
 			}
 		}
 
@@ -79,8 +107,7 @@ namespace end
 			float spacing	= 0.5f;
 			int lineCount	= (int)(_size / spacing);
 			
-			float x = -_size / 2.0f;
-			float y = -_size / 2.0f;
+			float x = -_size * 0.5f, y = -_size * 0.5f;
 			float xS = spacing, yS = spacing;
 
 			y = -_size / 2.0f;

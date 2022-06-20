@@ -34,7 +34,7 @@ namespace
 {
 	HWND  main_hwnd = NULL;
 	end::dev_app_t dev_app{};
-}
+} // namespace
 
 int CALLBACK WinMain
 (
@@ -75,10 +75,10 @@ int CALLBACK WinMain
 		// RETURNS:
 		//		SUCCESS: Return code
 		//		FAILURE: 0 (GetLastError)
-		MessageBox(NULL,							// hWnd:	  Type: HWND 		handle to the owner window of the message box created. If NULL, the message box has no owner.
-			_T("Call to RegisterClassEx failed!"),	// lpText:    Type: LPCTSTR		The message to be displayed
-			_T("Engine Development"),				// lpCaption: Type: LPCTSTR		The dialog box title
-			NULL);									// uType	  Type: UINT		Contents and behavior of dialog box. Can be a combination of flags.
+		MessageBox(NULL,								// hWnd:	  Type: HWND 		handle to the owner window of the message box created. If NULL, the message box has no owner.
+			_T("Call to RegisterClassEx failed!"),		// lpText:    Type: LPCTSTR		The message to be displayed
+			_T("Engine Development"),					// lpCaption: Type: LPCTSTR		The dialog box title
+			NULL);										// uType	  Type: UINT		Contents and behavior of dialog box. Can be a combination of flags.
 		return 1;
 	}
 
@@ -90,15 +90,15 @@ int CALLBACK WinMain
 	//		FAILURE: NULL on failure (use GetLastError)
 	main_hwnd = CreateWindow
 	(
-		szWindowClass,								// lpClassName		- Name of the application. Null terminated string or class atom created by a previous call to RegisterClass or RegisterClassEx.
-		szTitle,									// lpWindowName		- window name
-		WS_POPUPWINDOW | WS_CAPTION,				// dwStyle			- Style of window being created. (more in MSDN) // CHANGED FROM WS_OVERLAPPEDWINDOW TO DISABLE SIZING
-		CW_USEDEFAULT, CW_USEDEFAULT,				// X,Y				- Initial position
-		1280, 720,									// nWidth, nHeight	- Width/height of window (in device units)
-		NULL,										// hWndParent		- Handle to parent or owner window of the window being created. To create a child or owned window, supply a valid window handle.
-		NULL,										// hMenu			- Handle to a menu, or specifies a child-window identifier depending on the window style.
-		hInstance,									// hInstance		- Handle to the instance of the module to be associated with the window
-		NULL										// lpParam			- Pointer to a value to be passed to the window through the CREATESTRUCT struct, pointed to by the lParam param of WM_CREATE.
+		szWindowClass,									// lpClassName		- Name of the application. Null terminated string or class atom created by a previous call to RegisterClass or RegisterClassEx.
+		szTitle,										// lpWindowName		- window name
+		WS_POPUPWINDOW | WS_CAPTION | WS_MINIMIZEBOX,	// dwStyle			- Style of window being created. (more in MSDN) // CHANGED FROM WS_OVERLAPPEDWINDOW TO DISABLE SIZING
+		250, 175,										// X,Y				- Initial position
+		1280, 720,										// nWidth, nHeight	- Width/height of window (in device units)
+		NULL,											// hWndParent		- Handle to parent or owner window of the window being created. To create a child or owned window, supply a valid window handle.
+		NULL,											// hMenu			- Handle to a menu, or specifies a child-window identifier depending on the window style.
+		hInstance,										// hInstance		- Handle to the instance of the module to be associated with the window
+		NULL											// lpParam			- Pointer to a value to be passed to the window through the CREATESTRUCT struct, pointed to by the lParam param of WM_CREATE.
 	);
 
 	// If window failed to create
@@ -114,7 +114,6 @@ int CALLBACK WinMain
 			_T("Engine Development"),			
 			NULL								
 		);									
-
 		return 1;
 	}
 
