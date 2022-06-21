@@ -16,8 +16,7 @@ namespace end
 		size_t get_line_vert_capacity();
 		void add_matrix_transform(const float4x4&);
 		void add_matrix_transform_extended_z(const float4x4& _mx);
-		void create_grid(float _size, float4 _color);
-		void create_frustum(float3 _vertices[], float4 _color);
+		void add_grid(float _size, float4 _color);
 	}
 } // namespace end
 

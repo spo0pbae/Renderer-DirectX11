@@ -2,6 +2,7 @@
 #define FRUSTUM_CULLING_H
 
 #include <array>
+#include "debug_renderer.h"
 #include "math_types.h"
 #include "view.h"
 
@@ -14,13 +15,22 @@ namespace end
 				maxDepth, topleftX, topleftY;
 	} vpData;
 
-	struct sphere_t { float3 center; float radius; };	//Alterative: using sphere_t = float4;
-
-	struct  aabb_t { float3 min; float3 max; };			// Alternative: aabb_t { float3 center; float3 extents; };
-
-	struct plane_t { float3 normal; float offset; };	// Alterative: using plane_t = float4;
-
+	struct sphere_t { float3 center; float radius; };			// Alterative: using sphere_t = float4;
+	struct aabb_t	{ float3 min; float3 max; float4 col; };	// Alternative: aabb_t { float3 center; float3 extents; };
+	struct plane_t	{ float3 normal; float offset; };			// Alterative: using plane_t = float4;
 	using frustum_t = std::array<plane_t, 6>;
+
+	__declspec(selectany) float4 frustumVerts[8]
+	{
+		{-1.0f, -1.0f, 0.0f, 1.0f },
+		{-1.0f,  1.0f, 0.0f, 1.0f },
+		{ 1.0f,  1.0f, 0.0f, 1.0f },
+		{ 1.0f, -1.0f, 0.0f, 1.0f },
+		{-1.0f, -1.0f, 1.0f, 1.0f },
+		{-1.0f,  1.0f, 1.0f, 1.0f },
+		{ 1.0f,  1.0f, 1.0f, 1.0f },
+		{ 1.0f, -1.0f, 1.0f, 1.0f }
+	};
 
 	// Calculates the plane of a triangle from three points.
 	plane_t calculate_plane(float3 _a, float3 _b, float3 _c);
@@ -54,6 +64,12 @@ namespace end
 	// Returns false if the aabb is completely behind any plane.
 	// Otherwise returns true.
 	bool aabb_to_frustum(const aabb_t& _aabb, const frustum_t& _frustum);
+
+	float3 get_avg_verts(float3 _a, float3 _b, float3 _c, float3 _d);
+
+	// Draws for frustum and AABBs
+	void add_frustum(float4 _vertices[]);
+	void add_aabb(aabb_t _aabb);
 
 }// namespace end
 

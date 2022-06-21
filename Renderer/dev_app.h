@@ -4,26 +4,35 @@
 #include <cstdint>
 #include <chrono>
 
+#include "debug_renderer.h"
+#include "Emitters.h"
 #include "view.h"
 #include "Input.h"
-#include "Emitters.h"
+#include "frustum_culling.h"
 
 namespace end
 {
+#define NUM_AABBS 3
+
 	// Simple app class for development and testing purposes
 	struct dev_app_t
 	{
-		// Lab1
+		// Lab 1
 		emitter_s center;	// sorted pool center
 		emitter corners[4];	// free pool corners
 		pool_t<particle, 1024> sharedPool;
 
-		// Lab2
-		float4x4 mx1;
-		float4x4 mx2;
-		float4x4 mx3;
+		// Lab 2
+		float4x4 target;
+		float4x4 viewer1;
+		float4x4 viewer2;
 
 		view_t* cam; // used to get camera from renderer.h
+
+		// Lab 3
+		end::view_t targetView;
+		end::frustum_t frustum;
+		end::aabb_t AABB[NUM_AABBS];
 
 		// constructor
 		dev_app_t();

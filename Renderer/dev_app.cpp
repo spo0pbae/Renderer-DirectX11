@@ -1,8 +1,6 @@
 #include <iostream>
 
 #include "dev_app.h"
-#include "debug_renderer.h"
-#include "frustum_culling.h"
 
 namespace end
 {
@@ -29,14 +27,17 @@ namespace end
 	void dev_app_t::init_content()
 	{
 		// Initialize matrix positions
-		(XMMATRIX&)mx1 = XMMatrixIdentity();
-		mx1[3].xyz = { 0.0f, 0.1f, 0.0f };
+		(XMMATRIX&)target = XMMatrixIdentity();
+		target[3].xyz = { 0.0f, 0.1f, 0.0f };
 
-		(XMMATRIX&)mx2 = XMMatrixIdentity();
-		mx2[3].xyz = { -1.5f, 1.75f, 0.0f };
+		(XMMATRIX&)viewer1 = XMMatrixIdentity();
+		viewer1[3].xyz = { -1.5f, 1.75f, 0.0f };
 
-		(XMMATRIX&)mx3 = XMMatrixIdentity();
-		mx3[3].xyz = { 0.5f, 0.75f, 1.5f };
+		(XMMATRIX&)viewer2 = XMMatrixIdentity();
+		viewer2[3].xyz = { 0.5f, 0.75f, 1.5f };
+
+		// Lab 3
+
 	}
 
 	void dev_app_t::update()
@@ -44,7 +45,7 @@ namespace end
 		delta_time = calc_delta_time();
 
 		// Draw grid
-		end:debug_renderer::create_grid(10, gridCol);
+		end:debug_renderer::add_grid(10, gridCol);
 
 		update_grid_color();
 
@@ -172,9 +173,9 @@ namespace end
 
 		// LAB 2 MATRIX BEHAVIOURS
 		// Draw transforms
-		end::debug_renderer::add_matrix_transform_extended_z(mx1);
-		end::debug_renderer::add_matrix_transform(mx2);
-		end::debug_renderer::add_matrix_transform(mx3);
+		end::debug_renderer::add_matrix_transform_extended_z(target);
+		end::debug_renderer::add_matrix_transform(viewer1);
+		end::debug_renderer::add_matrix_transform(viewer2);
 
 		// Handle movement inputs for matrix transform and camera
 		const float speed		= 2.0f;
@@ -183,12 +184,12 @@ namespace end
 		move_camera(camSpeed);
 
 		// Look-At and Turn-To
-		float4 eye = mx2[3];
-		float4 at  = mx1[3];
+		float4 eye = viewer1[3];
+		float4 at  = target[3];
 		float4 up  = { 0.0f, 1.0f, 0.0f, 0.0f };
 
-		mx2 = matrix_look_at(eye, at, up);
-		mx3 = matrix_turn_to(mx3, at, delta_time);
+		viewer1 = matrix_look_at(eye, at, up);
+		viewer2 = matrix_turn_to(viewer2, at, delta_time);
 
 		// MOUSE
 		float deltaX = currMouseX - prevMouseX;
@@ -199,6 +200,21 @@ namespace end
 
 		float sens = 0.003f;
 		cam->view_mat = mouse_look(cam->view_mat, deltaX, deltaY, sens);
+		
+		// LAB 3 FRUSTUM CULLING
+		calculate_frustum(frustum, targetView, target);
+
+		// check aabbs against frustum 
+		for (int i = 0; i < NUM_AABBS; ++i)
+		{
+			bool inFrust = aabb_to_frustum(AABB[i], frustum);
+
+			// change color based on result
+			if (!inFrust)
+				AABB[i].col = { 0.0f, 1.0f, 1.0f, 1.0f };
+			else
+				AABB[i].col = { 1.0f, 1.0f, 0.0f, 1.0f };
+		}
 	}
 
 	void dev_app_t::update_grid_color()
@@ -319,24 +335,24 @@ namespace end
 	// Translates matrix transform along X/Z in local space
 	void dev_app_t::move_transform(const float _speed)
 	{
-		(XMMATRIX&)mx1 = XMMatrixInverse({ 0 }, (XMMATRIX&)mx1);
+		(XMMATRIX&)target = XMMatrixInverse({ 0 }, (XMMATRIX&)target);
 		if (keys[38] == true)
 		{
-			mx1[3].z -= 1.0f * _speed * static_cast<float>(delta_time);
+			target[3].z -= 1.0f * _speed * static_cast<float>(delta_time);
 		}
 		else if (keys[40] == true)
 		{
-			mx1[3].z += 1.0f * _speed * static_cast<float>(delta_time);
+			target[3].z += 1.0f * _speed * static_cast<float>(delta_time);
 		}
 		else if (keys[39] == true)
 		{
-			(XMMATRIX&)mx1 *= XMMatrixRotationY(-_speed * static_cast<float>(delta_time));
+			(XMMATRIX&)target *= XMMatrixRotationY(-_speed * static_cast<float>(delta_time));
 		}
 		else if (keys[37] == true)
 		{
-			(XMMATRIX&)mx1 *= XMMatrixRotationY(_speed * static_cast<float>(delta_time));
+			(XMMATRIX&)target *= XMMatrixRotationY(_speed * static_cast<float>(delta_time));
 		}
-		(XMMATRIX&)mx1 = XMMatrixInverse({ 0 }, (XMMATRIX&)mx1);
+		(XMMATRIX&)target = XMMatrixInverse({ 0 }, (XMMATRIX&)target);
 	}
 
 	// Translates camera along X/Z in local space
