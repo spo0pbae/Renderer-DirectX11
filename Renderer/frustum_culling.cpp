@@ -15,7 +15,7 @@ namespace end
 		(XMVECTOR&)plane.normal = XMVector3Normalize(XMVector3Cross((XMVECTOR&)ba, (XMVECTOR&)cb));
 
 		// calculate offset
-		offset = XMVector3Dot((XMVECTOR&)_a, (XMVECTOR&)plane.normal);
+		offset = XMVector3Dot((XMVECTOR&)plane.normal, (XMVECTOR&)_a);
 		plane.offset = XMVectorGetX(offset);
 
 		return plane;
@@ -25,12 +25,12 @@ namespace end
 	{
 		// Get view into space
 		XMMATRIX vp = XMMatrixMultiply((XMMATRIX&)_view.view_mat, (XMMATRIX&)_view.proj_mat);
-		XMMATRIX vpw = XMMatrixInverse({0}, vp);
+		XMMATRIX vpw = XMMatrixInverse({ 0 }, vp);
 
 		for (int i = 0; i < FRUST_VERT_COUNT; ++i)
 		{
 			// Get vertices into view space
-			(XMVECTOR&)frustumVerts[i] = XMVector3Transform((XMVECTOR&)frustumVerts[i], vpw);
+			(XMVECTOR&)frustumVerts[i] = XMVector4Transform((XMVECTOR&)frustumVerts[i], vpw);
 
 			// perspective divide
 			(XMVECTOR&)frustumVerts[i] /= XMVectorGetW((XMVECTOR&)frustumVerts[i]);
@@ -91,8 +91,9 @@ namespace end
 
 	int classify_sphere_to_plane(const sphere_t& _sphere, const plane_t& _plane) 
 	{
-		XMVECTOR v = XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal);
-		float val = XMVectorGetX(v) - _plane.offset;
+		//XMVECTOR v = XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal);
+		//float val = XMVectorGetX(v) - _plane.offset;
+		float val = XMVectorGetX(XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal)) - _plane.offset;
 
 		// in front of the plane
 		if (val > _sphere.radius)
@@ -113,10 +114,10 @@ namespace end
 		sphere_t sphere;
 		sphere.center = (_aabb.min + _aabb.max) * 0.5f;
 		float3 extents = _aabb.max - sphere.center;
-
+		
 		// projected radius = dot(normal,extent) 
 		sphere.radius = (extents.x * abs(_plane.normal.x)) + (extents.y * abs(_plane.normal.y)) + (extents.z * abs(_plane.normal.z));
-
+		
 		return classify_sphere_to_plane(sphere, _plane);
 	}
 
@@ -136,11 +137,9 @@ namespace end
 			(XMVectorGetY((XMVECTOR&)_a) + XMVectorGetY((XMVECTOR&)_b) + XMVectorGetY((XMVECTOR&)_c) + XMVectorGetY((XMVECTOR&)_d)) * 0.25f,
 			(XMVectorGetZ((XMVECTOR&)_a) + XMVectorGetZ((XMVECTOR&)_b) + XMVectorGetZ((XMVECTOR&)_c) + XMVectorGetZ((XMVECTOR&)_d)) * 0.25f
 		};
-
 		return (float3&)avg;
 	}
 
-	// Renders frustum
 	void add_frustum(float4* _vertices)
 	{
 		float4 color = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -166,31 +165,31 @@ namespace end
 		debug_renderer::add_line(_vertices[1].xyz, _vertices[5].xyz, color);
 	}
 
-	// Renders AABB box
 	void add_aabb(aabb_t _aabb)
 	{
-		// default cyan
-		float4 color = { 0.0f, 1.0f, 1.0f, 1.0f };
+		// front horizontal																									   
+		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.max.y, _aabb.min.z }, _aabb.col);
+		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.min.z }, { _aabb.min.x, _aabb.min.y, _aabb.min.z }, _aabb.col);
 
-		//1
-		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.max.y, _aabb.max.z }, color);
-		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, color);
-		
-		//2
-		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.min.z }, { _aabb.max.x, _aabb.max.y, _aabb.max.z }, color);
-		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.min.z }, { _aabb.max.x, _aabb.min.y, _aabb.max.z }, color);
-		
-		//3
-		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.max.z }, { _aabb.min.x, _aabb.max.y, _aabb.max.z }, color);
-		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.max.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, color);
-		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.max.z }, { _aabb.max.x, _aabb.min.y, _aabb.max.z }, color);
-		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.max.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, color);
-		
-		//4
-		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.max.y, _aabb.min.z }, color);
-		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.min.z }, { _aabb.min.x, _aabb.min.y, _aabb.min.z }, color);
-		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.min.z }, { _aabb.max.x, _aabb.min.y, _aabb.min.z }, color);
-		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.min.y, _aabb.min.z }, color);
+		// front vertical
+		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.min.z }, { _aabb.max.x, _aabb.min.y, _aabb.min.z }, _aabb.col);
+		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.min.y, _aabb.min.z }, _aabb.col);
+
+		// back horizontal																									 
+		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.max.z }, { _aabb.min.x, _aabb.max.y, _aabb.max.z }, _aabb.col);
+		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.max.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, _aabb.col);
+
+		// back vertical
+		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.max.z }, { _aabb.max.x, _aabb.min.y, _aabb.max.z }, _aabb.col);
+		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.max.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, _aabb.col);
+																										   
+		// right horizontal																											 
+		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.min.z }, { _aabb.max.x, _aabb.max.y, _aabb.max.z }, _aabb.col);
+		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.min.z }, { _aabb.max.x, _aabb.min.y, _aabb.max.z }, _aabb.col);
+
+		// left horizontal
+		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.max.y, _aabb.max.z }, _aabb.col);
+		debug_renderer::add_line({ _aabb.min.x, _aabb.min.y, _aabb.min.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, _aabb.col);
 	}
 
 }// namespace end

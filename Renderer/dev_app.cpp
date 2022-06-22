@@ -20,7 +20,7 @@ namespace end
 
 	dev_app_t::dev_app_t()
 	{
-		std::cout << "Log whatever you need here.\n"; // Don’t forget to include <iostream>
+		//std::cout << "Log whatever you need here.\n";
 		init_content();
 	}
 
@@ -38,14 +38,14 @@ namespace end
 
 		// Lab 3
 		AABB[0].min = {-4.0f, 0.1f, 3.0f };
-		AABB[0].max = {-2.0f, 0.1f, 5.0f };
-
-		AABB[1].min = { 4.0f, 0.1f, 3.0f };
-		AABB[1].max = { 5.0f, 0.1f, 5.0f };
-
-		AABB[2].min = { -3.5f, 0.1f,-2.0f };
-		AABB[2].max = { -1.0f, 0.1f,-3.0f };
+		AABB[0].max = {-2.0f, 2.0f, 5.0f };
 		
+		AABB[1].min = { 4.0f, 0.1f, 3.0f };
+		AABB[1].max = { 5.0f, 0.75f, 5.0f };
+		
+		AABB[2].min = { -3.5f, 0.1f, -2.0f };
+		AABB[2].max = { -1.0f, 1.1f, -1.0f };
+
 		for (int i = 0; i < NUM_AABBS; ++i)
 			AABB[i].col = { 0.0f, 1.0f, 1.0f, 1.0f };	// col
 	}
@@ -60,6 +60,7 @@ namespace end
 		update_grid_color();
 
 		// LAB 1 PARTICLES
+#pragma region Lab 1
 #if 0
 		int spawnCount = 3;
 		center.spawnCol = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -180,7 +181,9 @@ namespace end
 			}
 		}
 #endif
+#pragma endregion
 
+#pragma region Lab 2
 		// LAB 2 MATRIX BEHAVIOURS
 		// Draw transforms
 		end::debug_renderer::add_matrix_transform_extended_z(target);
@@ -210,26 +213,22 @@ namespace end
 
 		float sens = 0.003f;
 		cam->view_mat = mouse_look(cam->view_mat, deltaX, deltaY, sens);
-		
+#pragma endregion
+
 		// LAB 3 FRUSTUM CULLING
-		for (size_t i = 0; i < NUM_AABBS; i++)
-		{
+		for (size_t i = 0; i < NUM_AABBS; ++i)
 			add_aabb(AABB[i]);
-		}
 		
-		calculate_frustum(frustum, targetView, target);
-
-		// check aabbs against frustum 
-		for (int i = 0; i < NUM_AABBS; ++i)
-		{
-			bool inFrust = aabb_to_frustum(AABB[i], frustum);
-
-			// change color based on result
-			if (!inFrust)
-				AABB[i].col = { 0.0f, 1.0f, 1.0f, 1.0f };
-			else
-				AABB[i].col = { 1.0f, 1.0f, 0.0f, 1.0f };
-		}
+		//calculate_frustum(frustum, targetView, target);
+		//
+		//// check aabbs against frustum and change colors based on the result
+		//for (int i = 0; i < NUM_AABBS; ++i)
+		//{
+		//	bool inFrust = aabb_to_frustum(AABB[i], frustum);
+		//
+		//	if (!inFrust) AABB[i].col = { 0.0f, 1.0f, 1.0f, 1.0f };
+		//	else AABB[i].col = { 1.0f, 1.0f, 0.0f, 1.0f };
+		//}
 	}
 
 	void dev_app_t::update_grid_color()
@@ -414,7 +413,7 @@ namespace end
 		return matrix_orthonormalize_a(temp, {0.0f, 1.0f, 0.0f, 0.0f});
 	}
 
-	float dev_app_t::RandNumToNum(float _a, float _b)
+	float dev_app_t::rand_num_to_num(float _a, float _b)
 	{
 		float rando = rand() / (RAND_MAX + 1.0f);
 		float diff  = _b - _a;
@@ -422,7 +421,7 @@ namespace end
 		return _a + r;
 	}
 
-	float dev_app_t::DegreesToRadians(float _angle)
+	float dev_app_t::degrees_to_radians(float _angle)
 	{
 		return _angle * (3.14 / 180);
 	}

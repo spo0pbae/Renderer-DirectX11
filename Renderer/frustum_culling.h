@@ -62,10 +62,13 @@ namespace end
 	// Otherwise returns true.
 	bool aabb_to_frustum(const aabb_t& _aabb, const frustum_t& _frustum);
 
+	// Returns the average position of given vertices, used for drawing normals of a plane
 	float3 get_avg_verts(float3 _a, float3 _b, float3 _c, float3 _d);
 
-	// Draws for frustum and AABBs
+	// Draws frustum with given vertices using debug_renderer
 	void add_frustum(float4* _vertices);
+
+	// Draws 12 edges of AABB box using debug_renderer
 	void add_aabb(aabb_t _aabb);
 
 }// namespace end

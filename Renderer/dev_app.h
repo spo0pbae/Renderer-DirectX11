@@ -53,8 +53,8 @@ namespace end
 		float4x4_a mouse_look(float4x4_a _viewMx, float _deltaX, float _deltaY, float _sensitivity);
 
 		// math helper functions
-		float RandNumToNum(float _a, float _b);
-		float DegreesToRadians(float _angle);
+		float rand_num_to_num(float _a, float _b);
+		float degrees_to_radians(float _angle);
 	};
 
 }// namespace end
