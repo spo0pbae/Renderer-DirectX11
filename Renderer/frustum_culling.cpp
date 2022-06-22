@@ -27,7 +27,7 @@ namespace end
 		XMMATRIX vp = XMMatrixMultiply((XMMATRIX&)_view.view_mat, (XMMATRIX&)_view.proj_mat);
 		XMMATRIX vpw = XMMatrixInverse({0}, vp);
 
-		for (int i = 0; i < 8; ++i)
+		for (int i = 0; i < FRUST_VERT_COUNT; ++i)
 		{
 			// Get vertices into view space
 			(XMVECTOR&)frustumVerts[i] = XMVector3Transform((XMVECTOR&)frustumVerts[i], vpw);
@@ -69,6 +69,24 @@ namespace end
 		normPos = get_avg_verts(frustumVerts[0].xyz, frustumVerts[1].xyz, frustumVerts[4].xyz, frustumVerts[5].xyz);
 		left.normal += (float3&)normPos;
 		debug_renderer::add_line((float3&)normPos, left.normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+		// Get each vertex into world space
+		for (int i = 0; i < FRUST_VERT_COUNT; ++i)
+			(XMVECTOR&)frustumVerts[i] = XMVector3Transform((XMVECTOR&)frustumVerts[i], (XMMATRIX&)_world);
+
+		near	= calculate_plane(frustumVerts[3].xyz, frustumVerts[2].xyz, frustumVerts[1].xyz);
+		far		= calculate_plane(frustumVerts[7].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz);
+		top		= calculate_plane(frustumVerts[6].xyz, frustumVerts[1].xyz, frustumVerts[2].xyz);
+		bottom	= calculate_plane(frustumVerts[3].xyz, frustumVerts[0].xyz, frustumVerts[7].xyz);
+		right	= calculate_plane(frustumVerts[6].xyz, frustumVerts[2].xyz, frustumVerts[7].xyz);
+		left	= calculate_plane(frustumVerts[4].xyz, frustumVerts[1].xyz, frustumVerts[5].xyz);
+
+		_frustum[0] = near;
+		_frustum[1] = far;
+		_frustum[2] = top;
+		_frustum[3] = bottom;
+		_frustum[4] = right;
+		_frustum[5] = left;
 	}
 
 	int classify_sphere_to_plane(const sphere_t& _sphere, const plane_t& _plane) 
@@ -157,17 +175,17 @@ namespace end
 		//1
 		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.max.y, _aabb.max.z }, color);
 		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, color);
-
+		
 		//2
 		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.min.z }, { _aabb.max.x, _aabb.max.y, _aabb.max.z }, color);
 		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.min.z }, { _aabb.max.x, _aabb.min.y, _aabb.max.z }, color);
-
+		
 		//3
 		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.max.z }, { _aabb.min.x, _aabb.max.y, _aabb.max.z }, color);
 		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.max.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, color);
 		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.max.z }, { _aabb.max.x, _aabb.min.y, _aabb.max.z }, color);
 		debug_renderer::add_line({ _aabb.min.x, _aabb.max.y, _aabb.max.z }, { _aabb.min.x, _aabb.min.y, _aabb.max.z }, color);
-
+		
 		//4
 		debug_renderer::add_line({ _aabb.max.x, _aabb.max.y, _aabb.min.z }, { _aabb.min.x, _aabb.max.y, _aabb.min.z }, color);
 		debug_renderer::add_line({ _aabb.max.x, _aabb.min.y, _aabb.min.z }, { _aabb.min.x, _aabb.min.y, _aabb.min.z }, color);

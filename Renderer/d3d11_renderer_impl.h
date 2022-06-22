@@ -194,14 +194,6 @@ namespace end
 			vp.TopLeftX = 0.0f;
 			vp.TopLeftY = 0.0f;
 
-			// set up frustum viewport data
-			vpData.width	= vp.Width;
-			vpData.height	= vp.Height;
-			vpData.minDepth = vp.MinDepth;
-			vpData.maxDepth = vp.MaxDepth;
-			vpData.topleftX = 0.0f;
-			vpData.topleftY = 0.0f;
-
 			// Setup swapchain
 			DXGI_SWAP_CHAIN_DESC sd;
 			ZeroMemory(&sd, sizeof(sd));

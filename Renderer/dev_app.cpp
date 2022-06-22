@@ -37,7 +37,17 @@ namespace end
 		viewer2[3].xyz = { 0.5f, 0.75f, 1.5f };
 
 		// Lab 3
+		AABB[0].min = {-4.0f, 0.1f, 3.0f };
+		AABB[0].max = {-2.0f, 0.1f, 5.0f };
 
+		AABB[1].min = { 4.0f, 0.1f, 3.0f };
+		AABB[1].max = { 5.0f, 0.1f, 5.0f };
+
+		AABB[2].min = { -3.5f, 0.1f,-2.0f };
+		AABB[2].max = { -1.0f, 0.1f,-3.0f };
+		
+		for (int i = 0; i < NUM_AABBS; ++i)
+			AABB[i].col = { 0.0f, 1.0f, 1.0f, 1.0f };	// col
 	}
 
 	void dev_app_t::update()
@@ -202,6 +212,11 @@ namespace end
 		cam->view_mat = mouse_look(cam->view_mat, deltaX, deltaY, sens);
 		
 		// LAB 3 FRUSTUM CULLING
+		for (size_t i = 0; i < NUM_AABBS; i++)
+		{
+			add_aabb(AABB[i]);
+		}
+		
 		calculate_frustum(frustum, targetView, target);
 
 		// check aabbs against frustum 

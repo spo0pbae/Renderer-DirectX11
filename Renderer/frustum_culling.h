@@ -1,6 +1,8 @@
 #ifndef FRUSTUM_CULLING_H
 #define FRUSTUM_CULLING_H
 
+#define FRUST_VERT_COUNT 8
+
 #include <array>
 #include "debug_renderer.h"
 #include "math_types.h"
@@ -9,18 +11,13 @@
 // Note: You are free to make adjustments/additions to the declarations provided here.
 namespace end
 {
-	__declspec(selectany) struct viewport_data
-	{
-		float width, height, minDepth,
-				maxDepth, topleftX, topleftY;
-	} vpData;
 
 	struct sphere_t { float3 center; float radius; };			// Alterative: using sphere_t = float4;
 	struct aabb_t	{ float3 min; float3 max; float4 col; };	// Alternative: aabb_t { float3 center; float3 extents; };
 	struct plane_t	{ float3 normal; float offset; };			// Alterative: using plane_t = float4;
 	using frustum_t = std::array<plane_t, 6>;
 
-	__declspec(selectany) float4 frustumVerts[8]
+	__declspec(selectany) float4 frustumVerts[FRUST_VERT_COUNT]
 	{
 		{-1.0f, -1.0f, 0.0f, 1.0f },
 		{-1.0f,  1.0f, 0.0f, 1.0f },
@@ -68,7 +65,7 @@ namespace end
 	float3 get_avg_verts(float3 _a, float3 _b, float3 _c, float3 _d);
 
 	// Draws for frustum and AABBs
-	void add_frustum(float4 _vertices[]);
+	void add_frustum(float4* _vertices);
 	void add_aabb(aabb_t _aabb);
 
 }// namespace end
