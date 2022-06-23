@@ -11,6 +11,10 @@ namespace end
 		float4x4_a view_mat;
 		float4x4_a proj_mat;
 
+		// to be set in impl
+		float m_aspectRatio;
+		float m_fov;
+
 		// stores properties of a view
 		//
 		//	view and projection matrices	(REQUIRED)

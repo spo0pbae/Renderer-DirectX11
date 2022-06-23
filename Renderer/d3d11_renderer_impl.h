@@ -56,6 +56,9 @@ namespace end
 		ID3D11Buffer*				constant_buffer[CONSTANT_BUFFER::COUNT]{};
 		D3D11_VIEWPORT				view_port[VIEWPORT::COUNT]{};
 
+		//float m_aspectRatio = 0.0f;
+		//float m_fov = 3.1415926f * 0.25f;
+
 		/* Add more as needed...
 		ID3D11SamplerState*			sampler_state[STATE_SAMPLER::COUNT]{};
 		ID3D11BlendState*			blend_state[STATE_BLEND::COUNT]{};
@@ -74,7 +77,8 @@ namespace end
 			create_constant_buffers();
 			create_debug_buffer();
 
-			float aspect = view_port[VIEWPORT::DEFAULT].Width / view_port[VIEWPORT::DEFAULT].Height;
+			default_view.m_aspectRatio = view_port[VIEWPORT::DEFAULT].Width / view_port[VIEWPORT::DEFAULT].Height;
+			default_view.m_fov = 3.1415926f * 0.25f;
 
 			// Camera stuff
 			XMVECTOR eyepos = XMVectorSet(0.0f, 15.0f, -15.0f, 1.0f);
@@ -82,7 +86,7 @@ namespace end
 			XMVECTOR up		= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 			default_view.view_mat = (float4x4_a&)XMMatrixInverse(nullptr, XMMatrixLookAtLH(eyepos, focus, up));
-			default_view.proj_mat = (float4x4_a&)XMMatrixPerspectiveFovLH(3.1415926f / 4.0f, aspect, 0.01f, 100.0f);
+			default_view.proj_mat = (float4x4_a&)XMMatrixPerspectiveFovLH(default_view.m_fov, default_view.m_aspectRatio, 0.01f, 100.0f);
 		}
 
 		void draw_view(view_t& view)

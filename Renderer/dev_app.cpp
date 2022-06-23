@@ -26,6 +26,7 @@ namespace end
 
 	void dev_app_t::init_content()
 	{
+		// Lab 2
 		// Initialize matrix positions
 		(XMMATRIX&)target = XMMatrixIdentity();
 		target[3].xyz = { 0.0f, 0.1f, 0.0f };
@@ -37,6 +38,13 @@ namespace end
 		viewer2[3].xyz = { 0.5f, 0.75f, 1.5f };
 
 		// Lab 3
+		XMVECTOR eye = XMVectorSet(0.0f, 0.0f, -0.1f, 1.0f);
+		XMVECTOR at	 = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+		XMVECTOR up	 = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+		targetView.view_mat = (float4x4_a&)XMMatrixInverse(nullptr, XMMatrixLookAtLH(eye, at, up));
+		targetView.proj_mat = (float4x4_a&)XMMatrixPerspectiveFovLH(targetView.m_fov, targetView.m_aspectRatio, 1.0f, 10.0f);
+
 		AABB[0].min = {-4.0f, 0.1f, 3.0f };
 		AABB[0].max = {-2.0f, 2.0f, 5.0f };
 		
@@ -55,7 +63,7 @@ namespace end
 		delta_time = calc_delta_time();
 
 		// Draw grid
-		end:debug_renderer::add_grid(10, gridCol);
+		end:debug_renderer::add_grid(20, gridCol);
 
 		update_grid_color();
 

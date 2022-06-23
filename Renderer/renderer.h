@@ -26,7 +26,6 @@ namespace end
 		void draw();
 
 		view_t default_view;
-
 	private:
 		// PImpl idiom ("Pointer to implementation")
 

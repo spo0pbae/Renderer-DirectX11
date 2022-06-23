@@ -23,64 +23,76 @@ namespace end
 
 	void calculate_frustum(frustum_t& _frustum, const view_t& _view, float4x4 _world) 
 	{
-		// Get view into space
+		plane_t near, far, top, bottom, right, left;
+		float3 normPos;
+		
+		// moved from .h because it wouldn't draw
+		float4 frustumVerts[FRUST_VERT_COUNT] =
+		{
+			{-1.0f, -1.0f, 0.0f, 1.0f},
+			{-1.0f,  1.0f, 0.0f, 1.0f},
+			{ 1.0f,  1.0f, 0.0f, 1.0f},
+			{ 1.0f, -1.0f, 0.0f, 1.0f},
+			{-1.0f, -1.0f, 1.0f, 1.0f},
+			{-1.0f,  1.0f, 1.0f, 1.0f},
+			{ 1.0f,  1.0f, 1.0f, 1.0f},
+			{ 1.0f, -1.0f, 1.0f, 1.0f}
+		};
+
 		XMMATRIX vp = XMMatrixMultiply((XMMATRIX&)_view.view_mat, (XMMATRIX&)_view.proj_mat);
 		XMMATRIX vpw = XMMatrixInverse({ 0 }, vp);
-
 		for (int i = 0; i < FRUST_VERT_COUNT; ++i)
 		{
 			// Get vertices into view space
 			(XMVECTOR&)frustumVerts[i] = XMVector4Transform((XMVECTOR&)frustumVerts[i], vpw);
-
-			// perspective divide
-			(XMVECTOR&)frustumVerts[i] /= XMVectorGetW((XMVECTOR&)frustumVerts[i]);
+			(XMVECTOR&)frustumVerts[i] /= XMVectorGetW((XMVECTOR&)frustumVerts[i]); // perspective divide
 		}
-
+		
 		// draw the frustum
 		add_frustum(frustumVerts);
 		
 		// calculate norms and draw their lines in the middle of the plane
-		plane_t near = calculate_plane((float3&)frustumVerts[3], (float3&)frustumVerts[2], (float3&)frustumVerts[1]);
-		float3 normPos = get_avg_verts(frustumVerts[0].xyz, frustumVerts[1].xyz, frustumVerts[2].xyz, frustumVerts[3].xyz);
-		near.normal += (float3&)normPos;
+		near			= calculate_plane((float3&)frustumVerts[3], (float3&)frustumVerts[2], (float3&)frustumVerts[1]);
+		normPos			 = get_avg_verts(frustumVerts[0].xyz, frustumVerts[1].xyz, frustumVerts[2].xyz, frustumVerts[3].xyz);
+		near.normal		+= (float3&)normPos;
 		debug_renderer::add_line((float3&)normPos, near.normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-
-		plane_t far = calculate_plane((float3&)frustumVerts[7], (float3&)frustumVerts[5], (float3&)frustumVerts[6]);
-		normPos = get_avg_verts(frustumVerts[4].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz, frustumVerts[7].xyz);
-		far.normal += (float3&)normPos;
+		
+		far				= calculate_plane((float3&)frustumVerts[7], (float3&)frustumVerts[5], (float3&)frustumVerts[6]);
+		normPos			 = get_avg_verts(frustumVerts[4].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz, frustumVerts[7].xyz);
+		far.normal		+= (float3&)normPos;
 		debug_renderer::add_line((float3&)normPos, far.normal, {0.0f, 0.0f, 1.0f, 1.0f}, { 1.0f, 1.0f, 1.0f, 1.0f });
-
-		plane_t top = calculate_plane((float3&)frustumVerts[6], (float3&)frustumVerts[1], (float3&)frustumVerts[2]);
-		normPos = get_avg_verts(frustumVerts[1].xyz, frustumVerts[2].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz);
-		top.normal += (float3&)normPos;
+		
+		top				= calculate_plane((float3&)frustumVerts[6], (float3&)frustumVerts[1], (float3&)frustumVerts[2]);
+		normPos			= get_avg_verts(frustumVerts[1].xyz, frustumVerts[2].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz);
+		top.normal		+= (float3&)normPos;
 		debug_renderer::add_line((float3&)normPos, top.normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-
-		plane_t bottom = calculate_plane((float3&)frustumVerts[3], (float3&)frustumVerts[0], (float3&)frustumVerts[7]);
-		normPos = get_avg_verts(frustumVerts[4].xyz, frustumVerts[7].xyz, frustumVerts[0].xyz, frustumVerts[3].xyz);
-		bottom.normal += (float3&)normPos;
+		
+		bottom			= calculate_plane((float3&)frustumVerts[3], (float3&)frustumVerts[0], (float3&)frustumVerts[7]);
+		normPos			= get_avg_verts(frustumVerts[4].xyz, frustumVerts[7].xyz, frustumVerts[0].xyz, frustumVerts[3].xyz);
+		bottom.normal	+= (float3&)normPos;
 		debug_renderer::add_line((float3&)normPos, bottom.normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-
-		plane_t right = calculate_plane((float3&)frustumVerts[6], (float3&)frustumVerts[2], (float3&)frustumVerts[7]);
-		normPos = get_avg_verts(frustumVerts[3].xyz, frustumVerts[2].xyz, frustumVerts[6].xyz, frustumVerts[7].xyz);
-		right.normal += (float3&)normPos;
+		
+		right			= calculate_plane((float3&)frustumVerts[6], (float3&)frustumVerts[2], (float3&)frustumVerts[7]);
+		normPos			= get_avg_verts(frustumVerts[3].xyz, frustumVerts[2].xyz, frustumVerts[6].xyz, frustumVerts[7].xyz);
+		right.normal	+= (float3&)normPos;
 		debug_renderer::add_line((float3&)normPos, right.normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-
-		plane_t left = calculate_plane((float3&)frustumVerts[4], (float3&)frustumVerts[1], (float3&)frustumVerts[5]);
-		normPos = get_avg_verts(frustumVerts[0].xyz, frustumVerts[1].xyz, frustumVerts[4].xyz, frustumVerts[5].xyz);
-		left.normal += (float3&)normPos;
+		
+		left			= calculate_plane((float3&)frustumVerts[4], (float3&)frustumVerts[1], (float3&)frustumVerts[5]);
+		normPos			= get_avg_verts(frustumVerts[0].xyz, frustumVerts[1].xyz, frustumVerts[4].xyz, frustumVerts[5].xyz);
+		left.normal		+= (float3&)normPos;
 		debug_renderer::add_line((float3&)normPos, left.normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-
+		
 		// Get each vertex into world space
 		for (int i = 0; i < FRUST_VERT_COUNT; ++i)
 			(XMVECTOR&)frustumVerts[i] = XMVector3Transform((XMVECTOR&)frustumVerts[i], (XMMATRIX&)_world);
-
+		
 		near	= calculate_plane(frustumVerts[3].xyz, frustumVerts[2].xyz, frustumVerts[1].xyz);
 		far		= calculate_plane(frustumVerts[7].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz);
 		top		= calculate_plane(frustumVerts[6].xyz, frustumVerts[1].xyz, frustumVerts[2].xyz);
 		bottom	= calculate_plane(frustumVerts[3].xyz, frustumVerts[0].xyz, frustumVerts[7].xyz);
 		right	= calculate_plane(frustumVerts[6].xyz, frustumVerts[2].xyz, frustumVerts[7].xyz);
 		left	= calculate_plane(frustumVerts[4].xyz, frustumVerts[1].xyz, frustumVerts[5].xyz);
-
+		
 		_frustum[0] = near;
 		_frustum[1] = far;
 		_frustum[2] = top;

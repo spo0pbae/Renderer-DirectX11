@@ -17,18 +17,6 @@ namespace end
 	struct plane_t	{ float3 normal; float offset; };			// Alterative: using plane_t = float4;
 	using frustum_t = std::array<plane_t, 6>;
 
-	__declspec(selectany) float4 frustumVerts[FRUST_VERT_COUNT]
-	{
-		{-1.0f, -1.0f, 0.0f, 1.0f },
-		{-1.0f,  1.0f, 0.0f, 1.0f },
-		{ 1.0f,  1.0f, 0.0f, 1.0f },
-		{ 1.0f, -1.0f, 0.0f, 1.0f },
-		{-1.0f, -1.0f, 1.0f, 1.0f },
-		{-1.0f,  1.0f, 1.0f, 1.0f },
-		{ 1.0f,  1.0f, 1.0f, 1.0f },
-		{ 1.0f, -1.0f, 1.0f, 1.0f }
-	};
-
 	// Calculates the plane of a triangle from three points.
 	plane_t calculate_plane(float3 _a, float3 _b, float3 _c);
 
@@ -53,7 +41,7 @@ namespace end
 	// Returns -1 if the aabb is completely behind the plane.
 	// Returns 1 if the aabb is completely in front of the plane.
 	// Otherwise returns 0 (aabb overlaps the plane)
-	// MUST BE IMPLEMENTED UsING THE PROJECTED RADIUS TEST
+	// MUST BE IMPLEMENTED USING THE PROJECTED RADIUS TEST
 	int classify_aabb_to_plane(const aabb_t& _aabb, const plane_t& _plane);
 
 	// Determines if the aabb is inside the frustum.

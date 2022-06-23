@@ -33,7 +33,6 @@ MSG begin_main_loop();
 namespace
 {
 	HWND  main_hwnd = NULL;
-	end::dev_app_t dev_app{};
 } // namespace
 
 int CALLBACK WinMain
@@ -263,7 +262,11 @@ void destroy_console(int exit_code)
 MSG begin_main_loop()
 {
 	MSG msg;
+	end::dev_app_t dev_app{};
 	end::renderer_t renderer(main_hwnd);
+
+	dev_app.targetView.m_aspectRatio = renderer.default_view.m_aspectRatio;
+	dev_app.targetView.m_fov = renderer.default_view.m_fov;
 
 	// Main application loop:
 	while (true)
