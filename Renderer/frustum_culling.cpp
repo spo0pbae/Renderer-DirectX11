@@ -26,13 +26,14 @@ namespace end
 		frustum_t temp;
 		float3 normPos;
 	
+		// standard cube to be squished into projection space
 		// moved from .h because it wouldn't draw
 		float4 frustumVerts[FRUST_VERT_COUNT] =
 		{
-			{-1.0f, -1.0f, 0.0f, 1.0f},
-			{-1.0f,  1.0f, 0.0f, 1.0f},
-			{ 1.0f,  1.0f, 0.0f, 1.0f},
-			{ 1.0f, -1.0f, 0.0f, 1.0f},
+			{-1.0f, -1.0f,-1.0f, 1.0f},
+			{-1.0f,  1.0f,-1.0f, 1.0f},
+			{ 1.0f,  1.0f,-1.0f, 1.0f},
+			{ 1.0f, -1.0f,-1.0f, 1.0f},
 			{-1.0f, -1.0f, 1.0f, 1.0f},
 			{-1.0f,  1.0f, 1.0f, 1.0f},
 			{ 1.0f,  1.0f, 1.0f, 1.0f},
@@ -92,6 +93,7 @@ namespace end
 		for (int i = 0; i < FRUST_VERT_COUNT; ++i)
 			(XMVECTOR&)frustumVerts[i] = XMVector3Transform((XMVECTOR&)frustumVerts[i], (XMMATRIX&)_world);
 		
+		// calculate planes in world space
 		temp[0] = calculate_plane(frustumVerts[3].xyz, frustumVerts[2].xyz, frustumVerts[1].xyz);
 		temp[1] = calculate_plane(frustumVerts[7].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz);
 		temp[2] = calculate_plane(frustumVerts[6].xyz, frustumVerts[1].xyz, frustumVerts[2].xyz);
@@ -105,16 +107,16 @@ namespace end
 
 	int classify_sphere_to_plane(const sphere_t& _sphere, const plane_t& _plane) 
 	{
-		XMVECTOR v = XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal);
-		float val = XMVectorGetX(v) - _plane.offset;
+		XMVECTOR d = XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal);
+		float distance = XMVectorGetX(d) - _plane.offset;
 
-		if (val > _sphere.radius)		// in front of the plane
+		if (distance > _sphere.radius)			// in front of the plane
 			return 1;	
 
-		else if (val < -_sphere.radius)	// Behind the plane
+		else if (distance < -_sphere.radius)	// Behind the plane
 			return -1;
 
-		else							// overlaps plane
+		else									// overlaps plane
 			return 0;
 	}
 

@@ -49,14 +49,23 @@ namespace end
 		targetView.view_mat = (float4x4_a&)XMMatrixInverse(nullptr, XMMatrixLookAtLH(eye, at, up));
 		targetView.proj_mat = (float4x4_a&)XMMatrixPerspectiveFovLH(targetView.m_fov, targetView.m_aspectRatio, 1.0f, 10.0f);
 
-		AABB[0].min = {-4.0f, 0.1f, 3.0f };
-		AABB[0].max = {-2.0f, 2.0f, 5.0f };
+		AABB[0].min = {-6.0f, 0.1f,  3.0f };
+		AABB[0].max = {-3.0f, 2.0f,  5.0f };
 		
-		AABB[1].min = { 4.0f, 0.1f, 3.0f };
-		AABB[1].max = { 5.0f, 0.75f, 5.0f };
+		AABB[1].min = { 4.0f, 0.1f,  2.0f };
+		AABB[1].max = { 5.0f, 0.75f, 7.0f };
 		
-		AABB[2].min = { -3.5f, 0.1f, -2.0f };
-		AABB[2].max = { -1.0f, 1.1f, -1.0f };
+		AABB[2].min = {-3.5f, 0.1f, -2.0f };
+		AABB[2].max = {-1.0f, 1.1f, -1.0f };
+
+		AABB[3].min = { 3.5f, 0.1f, -6.0f };
+		AABB[3].max = { 1.0f, 1.1f, -4.0f };
+
+		AABB[4].min = {-4.5f, 0.1f, -5.0f };
+		AABB[4].max = {-3.0f, 0.6f, -3.0f };
+
+		AABB[5].min = { 6.5f, 0.1f, -2.0f };
+		AABB[5].max = { 4.0f, 1.25f,-1.0f };
 
 		for (int i = 0; i < NUM_AABBS; ++i)
 			AABB[i].col = { 0.0f, 1.0f, 1.0f, 1.0f };	// col
@@ -67,7 +76,7 @@ namespace end
 		delta_time = calc_delta_time();
 
 		// Draw grid
-		end:debug_renderer::add_grid(20, gridCol);
+		end:debug_renderer::add_grid(15, gridCol);
 
 		update_grid_color();
 

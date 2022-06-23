@@ -12,7 +12,7 @@
 
 namespace end
 {
-#define NUM_AABBS 3
+#define NUM_AABBS 6
 
 	// Simple app class for development and testing purposes
 	struct dev_app_t
