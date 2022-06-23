@@ -91,9 +91,9 @@ namespace end
 
 	int classify_sphere_to_plane(const sphere_t& _sphere, const plane_t& _plane) 
 	{
-		//XMVECTOR v = XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal);
-		//float val = XMVectorGetX(v) - _plane.offset;
-		float val = XMVectorGetX(XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal)) - _plane.offset;
+		XMVECTOR v = XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal);
+		float val = XMVectorGetX(v) - _plane.offset;
+		//float val = XMVectorGetX(XMVector3Dot((XMVECTOR&)_sphere.center, (XMVECTOR&)_plane.normal)) - _plane.offset;
 
 		// in front of the plane
 		if (val > _sphere.radius)

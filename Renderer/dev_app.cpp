@@ -219,16 +219,18 @@ namespace end
 		for (size_t i = 0; i < NUM_AABBS; ++i)
 			add_aabb(AABB[i]);
 		
-		//calculate_frustum(frustum, targetView, target);
-		//
-		//// check aabbs against frustum and change colors based on the result
-		//for (int i = 0; i < NUM_AABBS; ++i)
-		//{
-		//	bool inFrust = aabb_to_frustum(AABB[i], frustum);
-		//
-		//	if (!inFrust) AABB[i].col = { 0.0f, 1.0f, 1.0f, 1.0f };
-		//	else AABB[i].col = { 1.0f, 1.0f, 0.0f, 1.0f };
-		//}
+		calculate_frustum(frustum, targetView, target);
+		
+		// check aabbs against frustum and change colors based on the result
+		for (int i = 0; i < NUM_AABBS; ++i)
+		{
+			bool inFrust = aabb_to_frustum(AABB[i], frustum);
+		
+			if (inFrust == false) 
+				AABB[i].col = { 0.0f, 1.0f, 1.0f, 1.0f };
+			else 
+				AABB[i].col = { 1.0f, 1.0f, 0.0f, 1.0f };
+		}
 	}
 
 	void dev_app_t::update_grid_color()
