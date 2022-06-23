@@ -54,40 +54,40 @@ namespace end
 		
 		// calculate norms and draw their lines in the middle of the plane
 		// near
-		temp[0]			= calculate_plane((float3&)frustumVerts[3], (float3&)frustumVerts[2], (float3&)frustumVerts[1]);
+		temp[0]			= calculate_plane(frustumVerts[3].xyz, frustumVerts[2].xyz, frustumVerts[1].xyz);
 		normPos			= get_avg_verts(frustumVerts[0].xyz, frustumVerts[1].xyz, frustumVerts[2].xyz, frustumVerts[3].xyz);
-		temp[0].normal	+= (float3&)normPos;
-		debug_renderer::add_line((float3&)normPos, temp[0].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		temp[0].normal	+= normPos;
+		debug_renderer::add_line(normPos, temp[0].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 		
 		// far
-		temp[1]			= calculate_plane((float3&)frustumVerts[7], (float3&)frustumVerts[5], (float3&)frustumVerts[6]);
+		temp[1]			= calculate_plane(frustumVerts[7].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz);
 		normPos			= get_avg_verts(frustumVerts[4].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz, frustumVerts[7].xyz);
-		temp[1].normal	+= (float3&)normPos;
-		debug_renderer::add_line((float3&)normPos, temp[1].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		temp[1].normal	+= normPos;
+		debug_renderer::add_line(normPos, temp[1].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 		
 		// top
-		temp[2]			= calculate_plane((float3&)frustumVerts[6], (float3&)frustumVerts[1], (float3&)frustumVerts[2]);
+		temp[2]			= calculate_plane(frustumVerts[6].xyz, frustumVerts[1].xyz, frustumVerts[2].xyz);
 		normPos			= get_avg_verts(frustumVerts[1].xyz, frustumVerts[2].xyz, frustumVerts[5].xyz, frustumVerts[6].xyz);
-		temp[2].normal	+= (float3&)normPos;
-		debug_renderer::add_line((float3&)normPos, temp[2].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		temp[2].normal	+= normPos;
+		debug_renderer::add_line(normPos, temp[2].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 		
 		// bottom
-		temp[3]			= calculate_plane((float3&)frustumVerts[3], (float3&)frustumVerts[0], (float3&)frustumVerts[7]);
+		temp[3]			= calculate_plane(frustumVerts[3].xyz, frustumVerts[0].xyz, frustumVerts[7].xyz);
 		normPos			= get_avg_verts(frustumVerts[4].xyz, frustumVerts[7].xyz, frustumVerts[0].xyz, frustumVerts[3].xyz);
-		temp[3].normal	+= (float3&)normPos;
-		debug_renderer::add_line((float3&)normPos, temp[3].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		temp[3].normal	+= normPos;
+		debug_renderer::add_line(normPos, temp[3].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 		
 		// right
-		temp[4]			= calculate_plane((float3&)frustumVerts[6], (float3&)frustumVerts[2], (float3&)frustumVerts[7]);
+		temp[4]			= calculate_plane(frustumVerts[6].xyz, frustumVerts[2].xyz, frustumVerts[7].xyz);
 		normPos			= get_avg_verts(frustumVerts[3].xyz, frustumVerts[2].xyz, frustumVerts[6].xyz, frustumVerts[7].xyz);
-		temp[4].normal	+= (float3&)normPos;
-		debug_renderer::add_line((float3&)normPos, temp[4].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		temp[4].normal	+= normPos;
+		debug_renderer::add_line(normPos, temp[4].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 		
 		// left
-		temp[5]			= calculate_plane((float3&)frustumVerts[4], (float3&)frustumVerts[1], (float3&)frustumVerts[5]);
+		temp[5]			= calculate_plane(frustumVerts[4].xyz, frustumVerts[1].xyz, frustumVerts[5].xyz);
 		normPos			= get_avg_verts(frustumVerts[0].xyz, frustumVerts[1].xyz, frustumVerts[4].xyz, frustumVerts[5].xyz);
-		temp[5].normal	+= (float3&)normPos;
-		debug_renderer::add_line((float3&)normPos, temp[5].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		temp[5].normal	+= normPos;
+		debug_renderer::add_line(normPos, temp[5].normal, { 0.0f, 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 		
 		// Get each vertex into world space
 		for (int i = 0; i < FRUST_VERT_COUNT; ++i)

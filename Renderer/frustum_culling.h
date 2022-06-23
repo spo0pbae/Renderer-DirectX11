@@ -11,11 +11,10 @@
 // Note: You are free to make adjustments/additions to the declarations provided here.
 namespace end
 {
-
 	struct sphere_t { float3 center; float radius; };			// Alterative: using sphere_t = float4;
 	struct aabb_t	{ float3 min; float3 max; float4 col; };	// Alternative: aabb_t { float3 center; float3 extents; };
 	struct plane_t	{ float3 normal; float offset; };			// Alterative: using plane_t = float4;
-	using frustum_t = std::array<plane_t, 6>;
+	using  frustum_t = std::array<plane_t, 6>;
 
 	// Calculates the plane of a triangle from three points.
 	plane_t calculate_plane(float3 _a, float3 _b, float3 _c);

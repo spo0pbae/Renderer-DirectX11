@@ -29,7 +29,7 @@ namespace end
 		// Lab 2
 		// Initialize matrix positions
 		(XMMATRIX&)target = XMMatrixIdentity();
-		target[3].xyz = { 0.0f, 0.1f, 0.0f };
+		target[3].xyz  = { 0.0f, 0.1f, 0.0f };
 
 		(XMMATRIX&)viewer1 = XMMatrixIdentity();
 		viewer1[3].xyz = { -1.5f, 1.75f, 0.0f };
