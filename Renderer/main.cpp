@@ -262,8 +262,8 @@ void destroy_console(int exit_code)
 MSG begin_main_loop()
 {
 	MSG msg;
-	end::dev_app_t dev_app{};
 	end::renderer_t renderer(main_hwnd);
+	end::dev_app_t dev_app{};
 
 	dev_app.targetView.m_aspectRatio = renderer.default_view.m_aspectRatio;
 	dev_app.targetView.m_fov = renderer.default_view.m_fov;

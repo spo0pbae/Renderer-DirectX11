@@ -42,6 +42,10 @@ namespace end
 		XMVECTOR at	 = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 		XMVECTOR up	 = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
+		// set viewing info
+		targetView.m_aspectRatio = 1.85609400f;
+		targetView.m_fov = 3.1415926f * 0.25f;
+
 		targetView.view_mat = (float4x4_a&)XMMatrixInverse(nullptr, XMMatrixLookAtLH(eye, at, up));
 		targetView.proj_mat = (float4x4_a&)XMMatrixPerspectiveFovLH(targetView.m_fov, targetView.m_aspectRatio, 1.0f, 10.0f);
 
