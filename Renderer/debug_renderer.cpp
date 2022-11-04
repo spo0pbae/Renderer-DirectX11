@@ -131,6 +131,30 @@ namespace end
 				x += xS;
 			}
 		}
+
+		void add_cube(float4* _vertices, float4 _color)
+		{
+
+			// Near plane
+			debug_renderer::add_line(_vertices[0].xyz, _vertices[3].xyz, _color);
+			debug_renderer::add_line(_vertices[1].xyz, _vertices[2].xyz, _color);
+			debug_renderer::add_line(_vertices[0].xyz, _vertices[1].xyz, _color);
+			debug_renderer::add_line(_vertices[3].xyz, _vertices[2].xyz, _color);
+
+			// Far plane
+			debug_renderer::add_line(_vertices[7].xyz, _vertices[4].xyz, _color);
+			debug_renderer::add_line(_vertices[6].xyz, _vertices[5].xyz, _color);
+			debug_renderer::add_line(_vertices[4].xyz, _vertices[5].xyz, _color);
+			debug_renderer::add_line(_vertices[6].xyz, _vertices[7].xyz, _color);
+
+			// Right plane
+			debug_renderer::add_line(_vertices[7].xyz, _vertices[3].xyz, _color);
+			debug_renderer::add_line(_vertices[6].xyz, _vertices[2].xyz, _color);
+
+			// Left plane
+			debug_renderer::add_line(_vertices[0].xyz, _vertices[4].xyz, _color);
+			debug_renderer::add_line(_vertices[1].xyz, _vertices[5].xyz, _color);
+		}
 	} // namespace debug_renderer
 
 } // namespace end

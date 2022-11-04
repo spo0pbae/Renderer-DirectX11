@@ -38,7 +38,7 @@ namespace end
 		viewer2[3].xyz = { 0.5f, 0.75f, 1.5f };
 
 		// Lab 3
-		XMVECTOR eye = XMVectorSet(0.0f, 0.0f, -0.1f, 1.0f);
+		XMVECTOR eye = XMVectorSet(0.0f, 0.0f,-0.1f, 1.0f);
 		XMVECTOR at	 = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 		XMVECTOR up	 = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
@@ -207,7 +207,7 @@ namespace end
 #pragma region Lab 2
 		// LAB 2 MATRIX BEHAVIOURS
 		// Draw transforms
-		end::debug_renderer::add_matrix_transform_extended_z(target);
+		end::debug_renderer::add_matrix_transform(target);
 		end::debug_renderer::add_matrix_transform(viewer1);
 		end::debug_renderer::add_matrix_transform(viewer2);
 
@@ -236,6 +236,7 @@ namespace end
 		cam->view_mat = mouse_look(cam->view_mat, deltaX, deltaY, sens);
 #pragma endregion
 
+#pragma region Lab 3
 		// LAB 3 FRUSTUM CULLING
 		for (size_t i = 0; i < NUM_AABBS; ++i)
 			add_aabb(AABB[i]);
@@ -252,6 +253,7 @@ namespace end
 			else 
 				AABB[i].col = { 1.0f, 1.0f, 0.0f, 1.0f };
 		}
+#pragma endregion
 	}
 
 	void dev_app_t::update_grid_color()
@@ -369,7 +371,6 @@ namespace end
 		return temp;
 	}
 
-	// Translates matrix transform along X/Z in local space
 	void dev_app_t::move_transform(const float _speed)
 	{
 		(XMMATRIX&)target = XMMatrixInverse({ 0 }, (XMMATRIX&)target);
@@ -392,7 +393,6 @@ namespace end
 		(XMMATRIX&)target = XMMatrixInverse({ 0 }, (XMMATRIX&)target);
 	}
 
-	// Translates camera along X/Z in local space
 	void dev_app_t::move_camera(const float _speed)
 	{
 		(XMMATRIX&)cam->view_mat = XMMatrixInverse({ 0 }, (XMMATRIX&)cam->view_mat);
@@ -459,4 +459,5 @@ namespace end
 
 		return std::min(1.0 / 15.0, elapsed_seconds.count());
 	}
-}
+
+} // namespace end

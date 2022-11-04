@@ -3,7 +3,6 @@
 
 #define FRUST_VERT_COUNT 8
 
-#include <array>
 #include "debug_renderer.h"
 #include "math_types.h"
 #include "view.h"
@@ -11,9 +10,9 @@
 // Note: You are free to make adjustments/additions to the declarations provided here.
 namespace end
 {
-	struct sphere_t { float3 center; float radius; };			// Alterative: using sphere_t = float4;
-	struct aabb_t	{ float3 min; float3 max; float4 col; };	// Alternative: aabb_t { float3 center; float3 extents; };
-	struct plane_t	{ float3 normal; float offset; };			// Alterative: using plane_t = float4;
+	struct aabb_t   { float3 min; float3 max; float4 col; };	// Alternative: aabb_t { float3 center; float3 extents; };
+	struct sphere_t { float3 center; float radius; };			// Alternative: using sphere_t = float4;
+	struct plane_t	{ float3 normal; float offset; };			// Alternative: using plane_t = float4;
 	using  frustum_t = std::array<plane_t, 6>;
 
 	// Calculates the plane of a triangle from three points.
@@ -51,9 +50,6 @@ namespace end
 
 	// Returns the average position of given vertices, used for drawing normals of a plane
 	float3 get_avg_verts(float3 _a, float3 _b, float3 _c, float3 _d);
-
-	// Draws frustum with given vertices using debug_renderer
-	void add_frustum(float4* _vertices);
 
 	// Draws 12 edges of AABB box using debug_renderer
 	void add_aabb(aabb_t _aabb);

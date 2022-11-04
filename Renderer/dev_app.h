@@ -17,22 +17,24 @@ namespace end
 	// Simple app class for development and testing purposes
 	struct dev_app_t
 	{
-		// Lab 1
-		emitter_s center;	// sorted pool center
-		emitter corners[4];	// free pool corners
+		// Lab 1 - Memory management
+		emitter_s center;	// sorted pool center fountain
+		emitter corners[4];	// free pool corner fountains
 		pool_t<particle, 1024> sharedPool;
 
-		// Lab 2
+		// Lab 2 - Matrix behaviours
 		float4x4 target;
 		float4x4 viewer1;
 		float4x4 viewer2;
 
 		view_t* cam; // used to get camera from renderer.h
 
-		// Lab 3
+		// Lab 3 - Frustum Culling
 		end::view_t targetView;
 		end::frustum_t frustum;
 		end::aabb_t AABB[NUM_AABBS];
+
+		// Lab 4 - BVH
 
 		// constructor
 		dev_app_t();
@@ -43,7 +45,11 @@ namespace end
 		void update();
 		void init_content();
 		void update_grid_color();
+
+		// Translates matrix transform along X/Z in local space
 		void move_transform(const float _speed);
+
+		// Translates camera along X/Z in local space, and Y in world space
 		void move_camera(const float _speed);
 
 		float4x4 matrix_look_at(float4 _viewerPos, float4 _targetPos, float4 _localUp);
