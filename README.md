@@ -5,7 +5,7 @@
 - Memory management  
 - Optimization  
 - Collision
-- Game Math  
+- Linear Algebra  
 
 ## Particle Emitters
 ![](Images/Lab1.png)
